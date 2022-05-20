@@ -1,0 +1,38 @@
+{
+    "project_info": {
+        "project_name": "PotatoDB",
+        "project_version": "1.0.0",
+        "project_description": "A JavaScript file system nosql database",
+        "project_development_start": "20 May, 2022",
+        "project_development_end": null,
+        "project_development_duration": "6:10:00"
+    },
+    "developer_info": {
+        "developer": "Swordax",
+        "developer_at": "@swordax.sy",
+        "developer_discord": "https://discord.com/users/465453058667839499/",
+        "developer_discord_id": "Swordax#5756",
+        "developer_github": "https://github.com/SwordaxSy",
+        "developer_website": "https://swordax.netlify.app"
+    },
+    "project_updates": {
+        "20_May_2022": [
+            "Started developing the project",
+            "Expirimented on the project idea",
+            "Completed the creation methods of a database, collection (farm), and documents (potato)",
+            "Completed the creation of Create, Read, Update, and Delete operations"
+        ],
+        "21_May_2022": [
+            "Changed the root structure of the database",
+            "Added initiating methods that the package user is going to interact with",
+            "Exported the necessary methods"
+        ]
+    },
+    "TODOS": [
+        "DB external configuation (want it to be presistant or not)",
+        "DB operation configuation (want the updateOne() and updateMany() to return new or old)",
+        "Operators for update methods ($pull, $push, $inc)",
+        "Farm methods (dropFarm(), countPotatos())",
+        "Potato methods (sort(), limit(), skip() on the findMany() method)"
+    ]
+}
