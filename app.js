@@ -1,9 +1,16 @@
+// import PotatoDB
 const PotatoDB = require("./PotatoDB.js");
 
-PotatoDB.setRoot("potatos");
+// set root
+PotatoDB.setRoot("infobases");
 
 (async () => {
-    const DB = await PotatoDB.createDatabase("DB");
-    const Users = await DB.createFarm("users");
-    await Users.insertOne({ username: "Swordax", age: 17 });
+    // create databases
+    const WebDB = await PotatoDB.createDatabase("WebDB");
+
+    // create farms
+    const Users = await WebDB.createFarm("users", true);
+
+    // interact with the farm
+    Users.insertOne({ username: "Swordax", age: 17 });
 })();

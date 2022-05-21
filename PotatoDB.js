@@ -10,15 +10,15 @@ const setRoot = (root) => {
 
 // create PotatoDB database
 const createDatabase = async (dbName) => {
-    const DB = new PotatoDB(dbName, POTATODB_ROOT);
+    const DB = new PotatoDB(dbName);
     await DB.init();
     return DB;
 };
 
 // database class
 class PotatoDB {
-    constructor(dbName, dbRoot = "databases") {
-        dbRoot = path.join(__dirname, dbRoot);
+    constructor(dbName) {
+        let dbRoot = path.join(__dirname, POTATODB_ROOT);
         let dbPath = path.join(dbRoot, dbName);
 
         this.dbRoot = dbRoot; // Project/databases
@@ -45,28 +45,35 @@ class PotatoDB {
         }
     }
 
-    async createFarm(farmName) {
-        this.farmName = farmName;
+    async createFarm(farmName, overwrite = false) {
         this.farms.push(farmName);
+        const farmPath = path.join(this.dbPath, `${farmName}.json`);
 
         try {
-            await fs.promises.writeFile(
-                path.join(this.dbPath, `${farmName}.json`),
-                "[]"
-            );
+            if (!fs.existsSync(farmPath) || overwrite) {
+                await fs.promises.writeFile(farmPath, "[]");
+            }
         } catch (err) {
             throw err;
         }
 
-        return new Farm(farmName, this.dbName, this.dbPath);
+        return new Farm(farmName, farmPath, this.dbName);
+    }
+
+    dropDatabase() {
+        try {
+            fs.rmSync(this.dbPath, { recursive: true, force: true });
+        } catch (err) {
+            throw err;
+        }
     }
 }
 
 class Farm {
-    constructor(farmName, dbName, dbPath) {
+    constructor(farmName, farmPath, dbName) {
         this.farmName = farmName;
+        this.farmPath = farmPath;
         this.dbName = dbName;
-        this.filePath = path.join(dbPath, `${this.farmName}.json`);
     }
 
     // PRIVATE GENERAL FUNC
@@ -87,18 +94,41 @@ class Farm {
         return test;
     }
     #validateQuery(test, caller) {
+        if (!test) {
+            test = {};
+        }
+
         if (typeof test !== "function" && typeof test !== "object") {
             throw Error(
                 `PotatoDB Type Error: ${caller} expected a test function or a query object as a first argument`
             );
         }
+
+        return test;
     }
     async #getData() {
-        let data = await fs.promises.readFile(this.filePath);
+        let data = await fs.promises.readFile(this.farmPath);
         data = data.toString();
         data = JSON.parse(data);
 
         return data;
+    }
+
+    // FARM METHODS
+    dropFarm() {
+        try {
+            fs.unlinkSync(this.farmPath);
+        } catch (err) {
+            throw err;
+        }
+    }
+    async countPotatos() {
+        try {
+            const data = await this.#getData();
+            return data.length;
+        } catch (err) {
+            throw err;
+        }
     }
 
     // INSERT
@@ -130,8 +160,8 @@ class Farm {
                 data.push(...newData);
             }
 
-            await fs.promises.writeFile(this.filePath, JSON.stringify(data));
-            return data;
+            await fs.promises.writeFile(this.farmPath, JSON.stringify(data));
+            return newData;
         } catch (err) {
             throw err;
         }
@@ -146,7 +176,7 @@ class Farm {
     // FIND
     async #findLogic(test, caller) {
         // validation
-        this.#validateQuery(test, caller);
+        test = this.#validateQuery(test, caller);
         test = this.#query(test);
 
         // find process
@@ -171,9 +201,9 @@ class Farm {
     }
 
     // UPDATE
-    async #updateLogic(test, updates, caller) {
+    async #updateLogic(test, updates, updated = true, caller) {
         // validation
-        this.#validateQuery(test, caller);
+        test = this.#validateQuery(test, caller);
 
         if (!updates || typeof updates !== "object") {
             throw Error(
@@ -186,10 +216,14 @@ class Farm {
         // update process
         try {
             const data = await this.#getData();
+            let returns = [];
 
             if (caller == "updateOne()") {
                 const index = data.findIndex(test);
+
+                if (!updated) returns = data[index];
                 data[index] = { ...data[index], ...updates };
+                if (updated) returns = data[index];
             } else {
                 const indexes = data
                     .map((potato, index) => {
@@ -198,35 +232,39 @@ class Farm {
                     .filter((index) => index !== -1);
 
                 for (let i = 0; i < indexes.length; i++) {
+                    if (!updated) returns.push(data[indexes[i]]);
                     data[indexes[i]] = { ...data[indexes[i]], ...updates };
+                    if (updated) returns.push(data[indexes[i]]);
                 }
             }
 
-            await fs.promises.writeFile(this.filePath, JSON.stringify(data));
-            return data;
+            await fs.promises.writeFile(this.farmPath, JSON.stringify(data));
+            return returns;
         } catch (err) {
             throw err;
         }
     }
-    async updateOne(test, updates) {
-        return await this.#updateLogic(test, updates, "updateOne()");
+    async updateOne(test, updates, updated) {
+        return await this.#updateLogic(test, updates, updated, "updateOne()");
     }
-    async updateMany(test, updates) {
-        return await this.#updateLogic(test, updates, "updateMany()");
+    async updateMany(test, updates, updated) {
+        return await this.#updateLogic(test, updates, updated, "updateMany()");
     }
 
     // DELETE
     async #deleteLogic(test, caller) {
         // validation
-        this.#validateQuery(test, caller);
+        test = this.#validateQuery(test, caller);
         test = this.#query(test);
 
         // delete process
         try {
             const data = await this.#getData();
+            let returns = [];
 
             if (caller == "deleteOne()") {
                 const index = data.findIndex(test);
+                returns = data[index];
                 data.splice(index, 1);
             } else {
                 let decrement = 0;
@@ -242,12 +280,13 @@ class Farm {
                     .filter((index) => index !== null);
 
                 for (let i = 0; i < indexes.length; i++) {
+                    returns.push(data[indexes[i]]);
                     data.splice(indexes[i], 1);
                 }
             }
 
-            await fs.promises.writeFile(this.filePath, JSON.stringify(data));
-            return data;
+            await fs.promises.writeFile(this.farmPath, JSON.stringify(data));
+            return returns;
         } catch (err) {
             throw err;
         }
