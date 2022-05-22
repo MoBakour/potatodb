@@ -69,6 +69,7 @@ class PotatoDB {
     }
 }
 
+// farm class
 class Farm {
     constructor(farmName, farmPath, dbName) {
         this.farmName = farmName;
@@ -99,8 +100,8 @@ class Farm {
         }
 
         if (typeof test !== "function" && typeof test !== "object") {
-            throw Error(
-                `PotatoDB Type Error: ${caller} expected a test function or a query object as a first argument`
+            throw new PotatoError(
+                `${caller} expected a test function or a query object as a first argument`
             );
         }
 
@@ -135,16 +136,12 @@ class Farm {
     async #insertLogic(newData, caller) {
         // validation
         if (typeof newData !== "object") {
-            throw Error(
-                `PotatoDB Type Error: ${caller} expected a potato object`
-            );
+            throw new PotatoError(`${caller} expected a potato object`);
         } else if (caller == "insertOne()" && Array.isArray(newData)) {
-            throw Error(
-                "PotatoDB Type Error: insertOne() accepts a single potato only"
-            );
+            throw new PotatoError("insertOne() accepts a single potato only");
         } else if (caller == "insertMany()" && !Array.isArray(newData)) {
-            throw Error(
-                "PotatoDB Type Error: insertMany() accepts an array of potatos only"
+            throw new PotatoError(
+                "insertMany accepts an array of potatos only"
             );
         }
 
@@ -161,7 +158,7 @@ class Farm {
             }
 
             await fs.promises.writeFile(this.farmPath, JSON.stringify(data));
-            return newData;
+            return type == "many" ? new PotatoArray(...newData) : newData;
         } catch (err) {
             throw err;
         }
@@ -187,7 +184,7 @@ class Farm {
                 return test ? data.find(test) : data[0];
             } else {
                 let result = test ? data.filter(test) : data;
-                return result;
+                return new PotatoArray(...result);
             }
         } catch (err) {
             throw err;
@@ -206,8 +203,8 @@ class Farm {
         test = this.#validateQuery(test, caller);
 
         if (!updates || typeof updates !== "object") {
-            throw Error(
-                `PotatoDB Update Error: ${caller} expected an updates object as a second argument`
+            throw new PotatoError(
+                `${caller} expected an updates object as a second argument`
             );
         }
 
@@ -239,7 +236,9 @@ class Farm {
             }
 
             await fs.promises.writeFile(this.farmPath, JSON.stringify(data));
-            return returns;
+            return Array.isArray(returns)
+                ? new PotatoArray(...returns)
+                : returns;
         } catch (err) {
             throw err;
         }
@@ -286,7 +285,9 @@ class Farm {
             }
 
             await fs.promises.writeFile(this.farmPath, JSON.stringify(data));
-            return returns;
+            return Array.isArray(returns)
+                ? new PotatoArray(...returns)
+                : returns;
         } catch (err) {
             throw err;
         }
@@ -296,6 +297,36 @@ class Farm {
     }
     async deleteMany(test) {
         return await this.#deleteLogic(test, "deleteMany()");
+    }
+}
+
+// potato array class
+class PotatoArray extends Array {
+    sort(sortBy) {
+        if (!sortBy || typeof sortBy !== "object") {
+            throw PotatoError("sort() expected a sortBy object");
+        } else if (Object.keys(sortBy).length !== 1) {
+            throw PotatoError("sort() expected a single sortBy property");
+        } else if (typeof sortBy[Object.keys(sortBy)[0]] !== "number") {
+            throw PotatoError(
+                "sort() expected a number value in the sortBy object"
+            );
+        }
+
+        const key = Object.keys(sortBy)[0];
+        const asc = Math.abs(sortBy[key]) == sortBy[key];
+
+        return super.sort((a, b) => {
+            return asc ? a[key] - b[key] : b[key] - a[key];
+        });
+    }
+}
+
+// potato error class
+class PotatoError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "PotatoError";
     }
 }
 
