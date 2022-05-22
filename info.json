@@ -5,7 +5,7 @@
         "project_description": "A JavaScript file system nosql database",
         "project_development_start": "20 May, 2022",
         "project_development_end": null,
-        "project_development_duration": "10:00:00"
+        "project_development_duration": "10:40:00"
     },
     "developer_info": {
         "developer": "Swordax",
@@ -37,11 +37,11 @@
             "Replaced all new Error() constructors with new PotatoError() constructors",
             "Created PotatoArray class",
             "Implemented the sort() method on the PotatoArray class",
-            "Converted all the returned arrays out of the CRUD methods to PotatoArrays"
+            "Converted all the returned arrays out of the CRUD methods to PotatoArrays",
+            "Modulized the project code",
+            "Changed the setRoot() logic",
+            "Implemented limit and skip options in findMany()"
         ]
     },
-    "TODOS": [
-        "Operators for update methods ($pull, $push, $inc)",
-        "Potato methods (sort(), limit(), skip() on the find methods)"
-    ]
+    "TODOS": ["Operators for update methods ($pull, $push, $inc)"]
 }
