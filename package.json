@@ -1,0 +1,20 @@
+{
+    "name": "potatodb",
+    "version": "1.0.0",
+    "description": "A JavaScript local filesystem nosql database",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "keywords": [
+        "potatodb",
+        "potato",
+        "database",
+        "filesystem",
+        "nodejs",
+        "javascript",
+        "nosql"
+    ],
+    "author": "Swordax",
+    "license": "ISC"
+}

@@ -1,0 +1,19 @@
+{
+    "project_info": {
+        "project_name": "PotatoDB",
+        "project_version": "1.0.0",
+        "project_description": "A JavaScript filesystem nosql database",
+        "project_development_start": "20 May, 2022",
+        "project_development_end": "16 June, 2022",
+        "project_development_duration": "18:00:00",
+        "project_github_repository": "https://github.com/SwordaxSy/potatodb"
+    },
+    "developer_info": {
+        "developer": "Swordax",
+        "developer_at": "@swordax.sy",
+        "developer_discord": "https://discord.com/users/465453058667839499/",
+        "developer_discord_id": "Swordax#5756",
+        "developer_github": "https://github.com/SwordaxSy",
+        "developer_website": "https://swordax.netlify.app"
+    }
+}
