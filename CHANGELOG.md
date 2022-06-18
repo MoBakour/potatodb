@@ -1,5 +1,5 @@
 # Updates History
 
-### V1.0.0 - June 17th, 2022
+## [1.0.0] - 2022-6-18
 
 -   Initial release
