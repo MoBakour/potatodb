@@ -84,7 +84,7 @@ DB.dropDatabase();
 The `countPotatoes()` method is a farm method returned from the `DB.createFarm()` method, it returns the precise number of potatoes in the farm. Potatoes in PotatoDB are like documents in NoSQL databases or records in SQL databases.
 
 ```js
-Farm.countPotatoes();
+await Farm.countPotatoes();
 ```
 
 ##### Farm.dropFarm
