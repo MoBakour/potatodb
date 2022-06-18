@@ -29,7 +29,7 @@ PotatoDB is available on [npm](https://www.npmjs.com/package/potatodb), all you 
 
 ## Usage
 
-##### Require
+#### Require
 
 After installing PotatoDB via npm, require `setRoot` and `createDatabase` methods from the library.
 
@@ -37,7 +37,7 @@ After installing PotatoDB via npm, require `setRoot` and `createDatabase` method
 const { setRoot, createDatabase } = require("potatodb");
 ```
 
-##### setRoot
+#### setRoot
 
 The `setRoot()` method is used to define location and name of the databases directory, which will later host the databases. The method takes two arguments: first is the directory name `__dirname`, and second is the desired name of the databases directory (defaults to "databases").
 
@@ -45,7 +45,7 @@ The `setRoot()` method is used to define location and name of the databases dire
 setRoot(__dirname, "databases");
 ```
 
-##### createDatabase
+#### createDatabase
 
 The `createDatabase()` method creates a database directory inside the databases directory, where farms (collections) will be contained. PotatoDB allows you to have multiple databases at the same time, all stored inside the databases directory. The `createDatabase()` method takes two arguments: first is the name of the database, and second is a boolean that specifies whether the database should be cleared out and rewritten whenever the server restarts or not (default to `false`).
 
@@ -53,7 +53,7 @@ The `createDatabase()` method creates a database directory inside the databases 
 const DB = await createDatabase("WebDB", true);
 ```
 
-##### DB.createFarm
+#### DB.createFarm
 
 The `createFarm()` method is a database method returned from the `createDatabase()` method, it allows you to create farms inside the database directory. Farms in PotatoDB are like collections in NoSQL databases or tables in SQL databases. This method takes two arguments: first is the name of the farm, and second is an options object.
 
@@ -71,7 +71,7 @@ Available options:
 -   `timestamps`
     Specifies whether the potatoes (document in NoSQL or records in SQL) inside the farm should be stamped with timestamps. Timestamps state when the potato was created and when it was lastly updated.
 
-##### DB.dropDatabase
+#### DB.dropDatabase
 
 The `dropDatabase()` method is a database method returned from the `createDatabase()` method, it allows you to entirely drop/delete the database.
 
@@ -79,7 +79,7 @@ The `dropDatabase()` method is a database method returned from the `createDataba
 DB.dropDatabase();
 ```
 
-##### Farm.countPotatoes
+#### Farm.countPotatoes
 
 The `countPotatoes()` method is a farm method returned from the `DB.createFarm()` method, it returns the precise number of potatoes in the farm. Potatoes in PotatoDB are like documents in NoSQL databases or records in SQL databases.
 
@@ -87,11 +87,11 @@ The `countPotatoes()` method is a farm method returned from the `DB.createFarm()
 await Farm.countPotatoes();
 ```
 
-##### Farm.dropFarm
+#### Farm.dropFarm
 
 The `dropFarm()` method is a farm method returned from the `DB.createFarm()` method, it allows you to entirely drop/delete the farm from the database.
 
-##### Farm.insertOne
+#### Farm.insertOne
 
 The `insertOne()` method is a farm method used to insert a single potato into the farm. The method takes a single potato object as an argument, and returns the inserted object.
 
@@ -99,7 +99,7 @@ The `insertOne()` method is a farm method used to insert a single potato into th
 await Farm.insertOne({ name: "Swordax", age: 1, isHuman: true });
 ```
 
-##### Farm.insertMany
+#### Farm.insertMany
 
 The `insertMany()` method is a farm method used to insert multiple potatoes into the farm. The method takes a single array of potato objects as an argument, and returns an array of the inserted objects.
 
@@ -118,7 +118,7 @@ await Farm.insertMany([
 ]);
 ```
 
-##### Farm.findOne
+#### Farm.findOne
 
 The `findOne()` method is a farm method used to find a single potato and return it. The method takes two arguments: first is a query object or a test function, and second is an options object. Both arguments are optional.
 
@@ -127,7 +127,7 @@ const byName = await Farm.findOne({ name: "Swordax" });
 const byNameAndAge = await Farm.findOne({ name: "Alxa", age: 3 });
 ```
 
-##### Farm.findMany
+#### Farm.findMany
 
 The `findMany()` method is a farm method used to find multiple potatoes and return them as an array. The method takes two arguments: first is a query object or a test function, and second is an options object. Both arguments are optional.
 
@@ -136,7 +136,7 @@ const eighteen = await Farm.findMany({ age: 18 });
 const eighteenOrOlder = await Farm.findMany((potato) => potato.age >= 18);
 ```
 
-##### Farm.updateOne
+#### Farm.updateOne
 
 The `updateOne()` method is a farm method used to update a single potato. The method takes three arguments: first is a query object or a test function, second is an updates object or an update function, and third is a boolean that specifies whether the method should return the updated version of the potato object or the pre-updated one (defaults to true which returns the updated version).
 
@@ -144,7 +144,7 @@ The `updateOne()` method is a farm method used to update a single potato. The me
 await Farm.updateOne({ name: "Swordax" }, { age: 2 }, false);
 ```
 
-##### Farm.updateMany
+#### Farm.updateMany
 
 The `updateMany()` method is a farm method used to update mulitple potatoes. The method takes three arguments: first is a query object or a test function, second is an updates object or an update function, and third is a boolean that specifies whether the method should return the updated version of the potato objects or the pre-updated one (defaults to true which returns the updated version).
 
@@ -152,7 +152,7 @@ The `updateMany()` method is a farm method used to update mulitple potatoes. The
 await Farm.updateMany((potato) => potato.age >= 18, { authorized: false });
 ```
 
-##### Farm.deleteOne
+#### Farm.deleteOne
 
 The `deleteOne()` method is a farm method used to delete a single potato. The method takes a single argument, which could be a query object or a test function. The method returns the deleted potato object.
 
@@ -161,7 +161,7 @@ await Farm.deleteOne({ name: "Alxa" });
 await Farm.deleteOne((potato) => potato.name === "Vazox");
 ```
 
-##### Farm.deleteMany
+#### Farm.deleteMany
 
 The `deleteMany()` method is a farm method used to delete multiple potatoes. The method takes a single argument, which could be a query object or a test function. The method returns an array of the deleted potato objects.
 
@@ -170,7 +170,7 @@ await Farm.deleteMany({ age: 0 });
 await Farm.deleteMany((potato) => potato.age < 18);
 ```
 
-##### Principles of Querying with PotatoDB
+#### Principles of Querying with PotatoDB
 
 Finding, updating, and deleteing methods of PotatoDB farms all require querying to select the right potato to return or apply changes on. Querying with PotatoDB can be done in two ways, either by providing a query object, or by providing a test function to be used in querying.
 
@@ -200,7 +200,7 @@ const data = await Users.findOne((user) => {
 });
 ```
 
-##### Query Operators
+#### Query Operators
 
 PotatoDB provides query operators that can be used in query objects when querying data. Query operators can help you build flexible reachy query objects instead of having to build a custom test function.
 
@@ -224,7 +224,7 @@ Valid Query Operators:
 | $neqv | != | Not equal to (regardless of data type) |
 | $in | Array.prototype.includes() String.prototype.includes() | Checks if array or string includes a value |
 
-##### Principles of Updating with PotatoDB
+#### Principles of Updating with PotatoDB
 
 Updating PotatoDB data can be done in two ways, either by providing an updates object, or by providing an updating function.
 
@@ -254,7 +254,7 @@ await Users.updateOne({ username: "Swordax" }, (user) => {
 });
 ```
 
-##### Update Operators
+#### Update Operators
 
 PotatoDB provides update operators that can be used inside update objects to give you more flexibility when updating fields. Update operators can give you shorthands to doing things you couldn't do unless you designed your own custom update function.
 
@@ -275,7 +275,7 @@ Valid Update Operators:
 | $concat | Array.prototype.concat() String.prototype.concat() | Concatenates two arrays/strings together |
 | $pull | | Removes all occurrences of a value from an array |
 
-##### Full Example
+#### Full Example
 
 The following code demostartes the creation of an API that communicates with a PotatoDB database system, integrated with express.js
 
