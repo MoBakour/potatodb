@@ -39,7 +39,7 @@ const { setRoot, createDatabase } = require("potatodb");
 
 #### setRoot
 
-The `setRoot()` method is used to define location and name of the databases directory, which will later host the databases. The method takes two arguments: first is the directory name `__dirname`, and second is the desired name of the databases directory (defaults to "databases").
+The `setRoot()` method is used to define the location and the name of the databases directory, which will later host the databases. The method takes two arguments: first is the directory name `__dirname`, and second is the desired name of the databases directory (defaults to "databases").
 
 ```js
 setRoot(__dirname, "databases");
@@ -127,6 +127,11 @@ const byName = await Farm.findOne({ name: "Swordax" });
 const byNameAndAge = await Farm.findOne({ name: "Alxa", age: 3 });
 ```
 
+Available options:
+
+-   `skip`
+    Specifies the amount of potatoes skipped before starting the search.
+
 #### Farm.findMany
 
 The `findMany()` method is a farm method used to find multiple potatoes and return them as an array. The method takes two arguments: first is a query object or a test function, and second is an options object. Both arguments are optional.
@@ -135,6 +140,13 @@ The `findMany()` method is a farm method used to find multiple potatoes and retu
 const eighteen = await Farm.findMany({ age: 18 });
 const eighteenOrOlder = await Farm.findMany((potato) => potato.age >= 18);
 ```
+
+Available options:
+
+-   `limit`
+    Specifies the maximum amount of potatoes retrieved.
+-   `skip`
+    Specifies the amount of potatoes skipped before starting the search.
 
 #### Farm.updateOne
 
@@ -222,7 +234,7 @@ Valid Query Operators:
 | $eqv | == | Equal to value (regardless of data type) |
 | $neq | !== | Not equal to |
 | $neqv | != | Not equal to (regardless of data type) |
-| $in | Array.prototype.includes() String.prototype.includes() | Checks if array or string includes a value |
+| $in | Array.prototype.includes() <br> String.prototype.includes() | Checks if array or string includes a value |
 
 #### Principles of Updating with PotatoDB
 
@@ -272,12 +284,12 @@ Valid Update Operators:
 |----------|----------------------------------------------------|--------------------------------------------------|
 | $inc | += -= | Increments/Decrements field by the given value |
 | $push | Array.prototype.push() | Pushes a value into an array field |
-| $concat | Array.prototype.concat() String.prototype.concat() | Concatenates two arrays/strings together |
+| $concat | Array.prototype.concat() <br> String.prototype.concat() | Concatenates two arrays/strings together |
 | $pull | | Removes all occurrences of a value from an array |
 
 #### Full Example
 
-The following code demostartes the creation of an API that communicates with a PotatoDB database system, integrated with express.js
+The following code demonstrates the creation of an API that communicates with a PotatoDB database system, integrated with express.js
 
 ```js
 const express = require("express");
@@ -291,35 +303,38 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // set potatodb root
-setRoot(__dirname, "databases);
+setRoot(__dirname, "databases");
 
 // create project database and users farm
 let DB, Users;
 (async () => {
-	DB = await createDatabase("DB", false);
-	Users = await DB.createFarm("Users", { identifications: true, timestamps: true });
+    DB = await createDatabase("DB", false);
+    Users = await DB.createFarm("Users", {
+        identifications: true,
+        timestamps: true,
+    });
 })();
 
 // create user
 app.post("/create/user", async (req, res) => {
-	try {
-		const user = await Users.insertOne(req.body);
-		res.status(200).json({ success: true, userId: user._id });
-	} catch (err) {
-		res.status(400).json({ success: false, err });
-		console.log(err);
-	}
+    try {
+        const user = await Users.insertOne(req.body);
+        res.status(200).json({ success: true, userId: user._id });
+    } catch (err) {
+        res.status(400).json({ success: false, err });
+        console.log(err);
+    }
 });
 
 // get user
 app.get("/get/user", async (req, res) => {
-	try {
-		const user = await Users.findOne({ username: req.body.username });
-		res.status(200).json({ success: true, user });
-	} catch (err) {
-		res.status(400).json({ success: false, err });
-		console.log(err);
-	}
+    try {
+        const user = await Users.findOne({ username: req.body.username });
+        res.status(200).json({ success: true, user });
+    } catch (err) {
+        res.status(400).json({ success: false, err });
+        console.log(err);
+    }
 });
 ```
 
