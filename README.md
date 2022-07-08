@@ -50,7 +50,7 @@ setRoot(__dirname, "databases");
 The `createDatabase()` method creates a database directory inside the databases directory, where farms (collections) will be contained. PotatoDB allows you to have multiple databases at the same time, all stored inside the databases directory. The `createDatabase()` method takes two arguments: first is the name of the database, and second is a boolean that specifies whether the database should be cleared out and rewritten whenever the server restarts or not (default to `false`).
 
 ```js
-const DB = await createDatabase("WebDB", true);
+const DB = createDatabase("WebDB", true);
 ```
 
 #### DB.createFarm
@@ -58,7 +58,7 @@ const DB = await createDatabase("WebDB", true);
 The `createFarm()` method is a database method returned from the `createDatabase()` method, it allows you to create farms inside the database directory. Farms in PotatoDB are like collections in NoSQL databases or tables in SQL databases. This method takes two arguments: first is the name of the farm, and second is an options object.
 
 ```js
-const Farm = await DB.createFarm("Farm", {
+const Farm = DB.createFarm("Farm", {
     identifications: false,
     timestamps: false,
 });
