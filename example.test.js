@@ -31,4 +31,7 @@ const data = (() => {
 
 (async () => {
     await Users.insertMany(data);
+
+    const result = await Users.findMany({});
+    console.log(result);
 })();
