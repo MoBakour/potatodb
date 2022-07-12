@@ -32,6 +32,7 @@ const data = (() => {
 (async () => {
     await Users.insertMany(data);
 
-    const result = await Users.findMany({});
+    const result = await Users.findMany({}, { sort: (a, b) => a.age - b.age });
+
     console.log(result);
 })();
