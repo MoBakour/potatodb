@@ -58,9 +58,7 @@ const data = [
 (async () => {
     await Users.insertMany(data);
 
-    const result = await Users.findMany({
-        hobbies: { $in: "coding" },
-    });
+    const result = await Users.deleteMany();
 
     console.log(result);
 })();
