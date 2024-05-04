@@ -10,7 +10,7 @@
 
 ## About
 
-PotatoDB is a local database system that can be used to store and manage data in JSON format in the local filesystem of node.js servers. PotatoDB is a NOSQL database system, it uses methods and functions to create and manage data.
+PotatoDB is a local database system that can be used to store and manage data in JSON format in the local filesystem of node.js servers. PotatoDB is a filesystem-based mini database system, it uses methods and functions to create and manage data.
 
 ## Features
 
