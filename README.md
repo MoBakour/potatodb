@@ -3,14 +3,14 @@
 <p align="center">
 	<img width="100" src="./logo.png">
 	<br>
-	A node.js file system mini database system.
+	A nodejs filesystem json database system.
 	<br>
 	By <a href="https://linktr.ee/swordax">Swordax</a>
 </p>
 
 ## About
 
-PotatoDB is a file system mini database system that can be used to store and manage data in JSON format in the local file system of servers running in the Node.js environment.
+PotatoDB is a nodejs filesystem json database system that can be used to store and manage data in JSON format in the local filesystem of servers running in the Node.js environment.
 
 ## Features
 
