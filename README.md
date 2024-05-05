@@ -5,7 +5,7 @@
 	<br>
 	A node.js file system mini database system.
 	<br>
-	By <a href="https://swordax.netlify.app">Swordax</a>
+	By <a href="https://linktr.ee/swordax">Swordax</a>
 </p>
 
 ## About
@@ -537,7 +537,7 @@ Swordax Contacts:
 
 -   linktr.ee: https://linktr.ee/swordax
 -   discord: https://discord.com/users/465453058667839499/
--   discord id: Swordax#5756
+-   discord username: swordax
 -   email: swordax.sy@gmail.com
 -   social media at: @swordax.sy
 -   github: https://github.com/SwordaxSy
