@@ -24,7 +24,7 @@ PotatoDB creates a main databases directory. Every newly created database will r
 
 ## Installation
 
-```shell
+```
 npm install potatodb
 ```
 
