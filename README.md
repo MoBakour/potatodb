@@ -3,7 +3,7 @@
 <p align="center">
 	<img width="100" src="./logo.png">
 	<br>
-	A node.js filesystem nosql database system.
+	A node.js file system mini database system.
 	<br>
 	By <a href="https://swordax.netlify.app">Swordax</a>
 </p>

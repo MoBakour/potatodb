@@ -12,7 +12,10 @@
 -   Extended update operators capabilities
 -   Improved code
 
-## [0.0.3-dev] - 2024-5-5
+## [1.0.0] - 2024-5-5
 
--   Fixed bug
+-   Fixed bug in find methods
+-   Improved sorting mechanism
+-   Added addToSet array query operator
 -   Maintained and added more JSDoc documentation
+-   Fixed documentation
