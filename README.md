@@ -82,9 +82,9 @@ const Farm = DB.createFarm("Farm", {
 Available options:
 
 -   `identifications`
-    Speicifes whether the potatoes (documents in NoSQL or records in SQL) inside the farm should be stamped with identification strings or not.
+    Speicifes whether the potatoes (documents in NoSQL or records in SQL) inside the farm should be stamped with identification strings or not. (defaults to true)
 -   `timestamps`
-    Specifies whether the potatoes (document in NoSQL or records in SQL) inside the farm should be stamped with timestamps (createdAt and updatedAt). Timestamps contain numerical timestamps that point to the time when the potato object was first created and lastly updated.
+    Specifies whether the potatoes (document in NoSQL or records in SQL) inside the farm should be stamped with timestamps (createdAt and updatedAt). Timestamps contain numerical timestamps that point to the time when the potato object was first created and lastly updated. (defaults to true)
 
 #### Farm.countPotatoes
 
