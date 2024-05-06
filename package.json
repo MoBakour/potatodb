@@ -12,5 +12,13 @@
         "nosql"
     ],
     "author": "Swordax",
-    "license": "ISC"
+    "license": "ISC",
+    "main": "index.js",
+    "directories": {
+        "lib": "lib"
+    },
+    "repository": {
+        "type": "git",
+        "url": "(https://github.com/SwordaxSy/potatodb.git)"
+    }
 }
