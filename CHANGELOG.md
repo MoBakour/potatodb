@@ -12,10 +12,15 @@
 -   Extended update operators capabilities
 -   Improved code
 
-## [1.0.0] - 2024-5-5
+## [0.0.3-dev] - 2024-5-5
 
 -   Fixed bug in find methods
 -   Improved sorting mechanism
 -   Added addToSet array query operator
 -   Maintained and added more JSDoc documentation
 -   Fixed documentation
+
+## [0.0.4-dev] - 2024-5-6
+
+-   Added logical query operators
+-   Added $elemMatch query operator
