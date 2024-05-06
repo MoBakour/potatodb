@@ -12,10 +12,10 @@ app.use(express.json());
 setRoot(__dirname, "databases");
 
 // create project database and users farm
-let DB, Users;
+let DB, User;
 (async () => {
     DB = await createDatabase("DB", false);
-    Users = await DB.createFarm("Users", {
+    User = await DB.createFarm("Users", {
         identifications: true,
         timestamps: true,
     });
@@ -29,7 +29,7 @@ let DB, Users;
 // create user
 app.post("/create-user", async (req, res) => {
     try {
-        const user = await Users.insertOne(req.body);
+        const user = await User.insertOne(req.body);
         res.status(200).json({ success: true, userId: user._id });
     } catch (err) {
         console.log(err);
@@ -40,7 +40,10 @@ app.post("/create-user", async (req, res) => {
 // get user
 app.get("/get-user", async (req, res) => {
     try {
-        const user = await Users.findOne({ username: req.body.username });
+        const user = await User.findOne(
+            { username: req.body.username },
+            { project: { password: 0 } }
+        );
         res.status(200).json({ success: true, user });
     } catch (err) {
         console.log(err);
@@ -59,7 +62,7 @@ app.get("/get-users/:pageNumber", async (req, res) => {
             3- sort data according to "user.personalInformation.age" field in ascending order
         */
 
-        const users = await Users.findMany(
+        const users = await User.findMany(
             {},
             {
                 skip: resultsPerPage * (req.params.pageNumber - 1),
@@ -67,6 +70,9 @@ app.get("/get-users/:pageNumber", async (req, res) => {
                 recent: true,
                 sort: {
                     "personalInformation.age": 1,
+                },
+                project: {
+                    password: 0,
                 },
             }
         );
@@ -88,7 +94,12 @@ app.patch("/update-username", async (req, res) => {
             {
                 username: req.body.newUsername,
             },
-            true // get post-updated user object
+            {
+                updated: true,
+                project: {
+                    password: 0,
+                },
+            }
         );
 
         res.status(200).json({ success: true, updatedUser });
@@ -101,7 +112,10 @@ app.patch("/update-username", async (req, res) => {
 // delete user
 app.delete("/delete-user/:userId", async (req, res) => {
     try {
-        const deletedUser = await User.deleteOne({ _id: req.params.userId });
+        const deletedUser = await User.deleteOne(
+            { _id: req.params.userId },
+            { project: { password: 0 } }
+        );
         res.status(200).json({ success: true, deletedUser });
     } catch (err) {
         console.log(err);
