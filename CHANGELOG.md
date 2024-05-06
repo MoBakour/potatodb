@@ -24,3 +24,4 @@
 
 -   Added logical query operators
 -   Added $elemMatch query operator
+-   Added result projection

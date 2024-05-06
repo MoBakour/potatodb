@@ -161,6 +161,7 @@ Available options:
 -   `skip` : (number) Specifies the number of potatoes to skip before starting the search.
 -   `recent`: (boolean) Specifies whether priority of search should be to recent potatoes. By default, data is traversed oldest to recent.
 -   `sort`: (object) An object that specifies the field to sort based on, and the value of that field would specify the order of sorting (positive number for ascending, negative number for descending).
+-   `project`: (object) An object that specifies fields to include/exclude from returned result.
 
 limit and sort options would make sense to be used with the `findMany()` method.
 
@@ -176,21 +177,25 @@ const data = await UsersFarm.findMany(
         sort: {
             age: 1, // sort according to the age field in an ascending order
         },
+        project: {
+            password: 0, // 0 means exclude
+            sensitiveInformation: 0,
+        },
     }
 );
 ```
 
 #### Farm.updateOne
 
-The `updateOne()` method is a farm method used to update a single potato. The method takes three arguments: first is a query object or a test function, second is an updates object or an update function, and third is a boolean that specifies whether the method should return the updated version of the potato object or the pre-updated one (defaults to true which returns the updated version).
+The `updateOne()` method is a farm method used to update a single potato. The method takes three arguments: first is a query object or a test function, second is an updates object or an update function, and third is an options object.
 
 ```js
-await Farm.updateOne({ name: "Swordax" }, { age: 2 }, true);
+await Farm.updateOne({ name: "Swordax" }, { age: 2 }, { updated: true });
 ```
 
 #### Farm.updateMany
 
-The `updateMany()` method is a farm method used to update mulitple potatoes. The method takes three arguments: first is a query object or a test function, second is an updates object or an update function, and third is a boolean that specifies whether the method should return the updated version of the potato objects or the pre-updated one (defaults to true which returns the updated version).
+The `updateMany()` method is a farm method used to update mulitple potatoes. The method takes three arguments: first is a query object or a test function, second is an updates object or an update function, and third is an options object.
 
 ```js
 await Farm.updateMany((potato) => potato.age >= 18, { authorized: false });
@@ -198,9 +203,18 @@ await Farm.updateMany((potato) => potato.age >= 18, { authorized: false });
 
 In the above example, the `updateMany()` method took a query test function instead of a query object. The query function filters for potatoes which have the age property greater than or equal to 18.
 
+#### Update Methods Options
+
+Both `updateOne()` and `updateMany()` methods could take a third options object.
+
+Available options:
+
+-   `updated`: (boolean) Specifies whether the returned result is the post-update or the pre-update version (defaults to true which returns the updated data).
+-   `project`: (object) An object that specifies fields to include/exclude from returned result.
+
 #### Farm.deleteOne
 
-The `deleteOne()` method is a farm method used to delete a single potato. The method takes a single argument, which could be a query object or a test function. The method returns the deleted potato object.
+The `deleteOne()` method is a farm method used to delete a single potato. The method takes two arguments: first is a query object or a test function, second is an options object. The method returns the deleted potato object.
 
 ```js
 await Farm.deleteOne({ name: "Alxa" });
@@ -209,12 +223,20 @@ await Farm.deleteOne((potato) => potato.name === "Vazox");
 
 #### Farm.deleteMany
 
-The `deleteMany()` method is a farm method used to delete multiple potatoes. The method takes a single argument, which could be a query object or a test function. The method returns an array of the deleted potato objects.
+The `deleteMany()` method is a farm method used to delete multiple potatoes. The method takes two arguments: first is a query object or a test function, second is an options object. The method returns an array of the deleted potato objects.
 
 ```js
 await Farm.deleteMany({ age: 0 });
 await Farm.deleteMany((potato) => potato.age < 18);
 ```
+
+#### Delete Methods Options
+
+Both `deleteOne()` and `deleteMany()` methods could take a second options object.
+
+Available options:
+
+-   `project`: (object) An object that specifies fields to include/exclude from returned result.
 
 #### Principles of Querying with PotatoDB
 
@@ -271,7 +293,7 @@ const eighteenOrOlder = await Users.findMany({ age: { $gte: 18 } });
 const underEighteen = await Users.findMany({ age: { $lt: 18 } });
 ```
 
-##### Query Operators
+##### Comparison Query Operators
 
 | Operator | JS Equivalent | Function                                 |
 | -------- | ------------- | ---------------------------------------- |
@@ -284,9 +306,64 @@ const underEighteen = await Users.findMany({ age: { $lt: 18 } });
 | $neq     | !==           | Not equal to                             |
 | $neqv    | !=            | Not equal to (regardless of data type)   |
 
+##### Logical Query Operators
+
+| Operator | JS Equivalent                        | Function               |
+| -------- | ------------------------------------ | ---------------------- |
+| $and     | &&                                   | All queries must pass  |
+| $or      | \|\|                                 | Some queries must pass |
+| $nor     | queries.every(query => !test(query)) | No queries must pass   |
+
+`$and`:
+
+```js
+// both provided queries should pass to select the potato object
+const users = await Users.findMany({
+    $and: [{ authenticated: true }, { verified: true }],
+});
+
+// the above is equivalent to this:
+const users = await Users.findMany({
+    authenticated: true,
+    verified: true,
+});
+```
+
+the `$and` operator may seem to be useless at first, as the query can be done without it. But it's strength comes with nesting logical operators to make more powerful queries.
+
+`$or`:
+
+```js
+// at least one of the provided queries should pass to select the potato object
+const users = await Users.findMany({
+    $or: [{ name: "Swordax" }, { name: "Vazox" }],
+});
+```
+
+`$nor`:
+
+```js
+// none of the provided queries should pass to select the potato object
+const users = await Users.findMany({
+    $nor: [{ deactivated: true }, { blocked: true }],
+});
+```
+
+You could nest logical operators to create powerful queries:
+
+```js
+const users = await Users.findMany({
+    $or: [
+        { $and: [queryObject_1, queryObject_2] },
+        { $and: [queryObject_3, queryObject_4] },
+        { $nor: [queryObject_5, queryObject_6] },
+    ],
+});
+```
+
 ##### Array Query Operators
 
-Array query operators (\$in, \$nin, and \$all) can be used in different scenarios.
+Array query operators (\$in, \$nin, \$all, and \$elemMatch) can be used in different scenarios.
 
 Given dataset with the following signature:
 
@@ -294,11 +371,15 @@ Given dataset with the following signature:
 {
     name: string,
     age: number,
-    hobbies: string[]
+    hobbies: string[],
+    classes: [{
+        subject: string,
+        gpa: number
+    }]
 }
 ```
 
-\$in:
+`$in`:
 
 ```js
 // gets users that have "Coding" inside their hobbies array
@@ -311,7 +392,7 @@ await Users.findMany({ age: { $in: [19, 20, 21] } });
 await Users.findMany({ hobbies: { $in: ["Coding", "Swimming"] } });
 ```
 
-\$nin:
+`$nin`:
 
 ```js
 // gets users that DO NOT have "Coding" inside their hobbies array
@@ -324,11 +405,21 @@ await Users.findMany({ age: { $nin: [19, 20, 21] } });
 await Users.findMany({ hobbies: { $nin: ["Coding", "Swimming"] } });
 ```
 
-\$all:
+`$all`:
 
 ```js
 // gets users that have both "Coding" and "Swimming" inside their hobbies array
 await Users.findMany({ hobbies: { $all: ["Coding", "Swimming"] } });
+```
+
+`$elemMatch`:
+
+```js
+// gets users that have the exact subdocument {subject:"Programming", gpa:4}
+// inside their classes array field
+await Users.findMany({
+    classes: { $elemMatch: { subject: "Programming", gpa: 4 } },
+});
 ```
 
 #### Principles of Updating with PotatoDB
@@ -413,6 +504,35 @@ await Users.updateMany(
 | $addToSet | Set.prototype.add()                                     | Pushes a value into an array field only if it doesn't already exist in it |
 | $pull     |                                                         | Removes all occurrences of a value from an array                          |
 | $concat   | Array.prototype.concat() <br> String.prototype.concat() | Concatenates two arrays/strings together                                  |
+
+#### Projection
+
+PotatoDB allows you to perform projection to your query and operations results. Projecting is selecting what fields to include/exclude in the returned result from the operation method. Projection option is available for all find, update, and delete methods in their options object. The option is called `project` and it takes a projection object.
+
+A projection object takes field names as keys, and zeros or ones as values. Fields flagged with 0 will be excluded while the rest will be included. Fields flagged with 1 will be included while the rest will be excluded. Note that you can't flag fields with zeros and ones at the same time in the same projection object, it's either zeros or ones.
+
+```js
+const users_with_ids_and_names_and_ages = await Users.findMany(
+    {},
+    {
+        project: {
+            _id: 1, // will include _id field in results
+            name: 1, // will include name field in results
+            age: 1, // will include age field in results
+        }, // all other fields will be excluded from the results
+    }
+);
+
+const users_without_timestamps = await Users.findMany(
+    {},
+    {
+        project: {
+            createdAt: 0, // will exclude createdAt field in results
+            updatedAt: 0, // will exclude updatedAt field in results
+        },
+    } // all other fields will be included in the results
+);
+```
 
 #### Full Example
 
