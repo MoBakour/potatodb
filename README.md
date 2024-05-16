@@ -5,7 +5,7 @@
 	<br>
 	A nodejs filesystem json database system.
 	<br>
-	By <a href="https://linktr.ee/swordax">Swordax</a>
+	By <a href="https://linkedin.com/in/mohbakour">Mohamed Bakour</a>
 </p>
 
 ## About
@@ -74,8 +74,8 @@ The `createFarm()` method is a database method returned from the `createDatabase
 
 ```js
 const Farm = DB.createFarm("Farm", {
-    identifications: true,
-    timestamps: true,
+	identifications: true,
+	timestamps: true,
 });
 ```
 
@@ -118,16 +118,16 @@ If identifications and timestamps were set on, then the returned potato objects 
 
 ```js
 await Farm.insertMany([
-    {
-        name: "Vazox",
-        age: 2,
-        isHuman: false,
-    },
-    {
-        name: "Alxa",
-        age: 3,
-        isHuman: true,
-    },
+	{
+		name: "Vazox",
+		age: 2,
+		isHuman: false,
+	},
+	{
+		name: "Alxa",
+		age: 3,
+		isHuman: true,
+	},
 ]);
 ```
 
@@ -169,19 +169,19 @@ Example with options:
 
 ```js
 const data = await UsersFarm.findMany(
-    {},
-    {
-        recent: true, // begin searching with most recent data
-        limit: 10, // return maximum of 10 results
-        skip: 5, // skip 5 potatoes before beginning the search
-        sort: {
-            age: 1, // sort according to the age field in an ascending order
-        },
-        project: {
-            password: 0, // 0 means exclude
-            sensitiveInformation: 0,
-        },
-    }
+	{},
+	{
+		recent: true, // begin searching with most recent data
+		limit: 10, // return maximum of 10 results
+		skip: 5, // skip 5 potatoes before beginning the search
+		sort: {
+			age: 1, // sort according to the age field in an ascending order
+		},
+		project: {
+			password: 0, // 0 means exclude
+			sensitiveInformation: 0,
+		},
+	}
 );
 ```
 
@@ -266,7 +266,7 @@ The following example queries users that have the nested `building` field set to
 
 ```js
 const data = await Users.findMany({
-    "country.city.street.building": "Uptown Building",
+	"country.city.street.building": "Uptown Building",
 });
 ```
 
@@ -276,9 +276,9 @@ The following example queries users that have "Arabic" and "English" languages l
 
 ```js
 const data = await Users.findOne((user) => {
-    return (
-        user.languages.includes("English") && user.languages.includes("Arabic")
-    );
+	return (
+		user.languages.includes("English") && user.languages.includes("Arabic")
+	);
 });
 ```
 
@@ -319,13 +319,13 @@ const underEighteen = await Users.findMany({ age: { $lt: 18 } });
 ```js
 // both provided queries should pass to select the potato object
 const users = await Users.findMany({
-    $and: [{ authenticated: true }, { verified: true }],
+	$and: [{ authenticated: true }, { verified: true }],
 });
 
 // the above is equivalent to this:
 const users = await Users.findMany({
-    authenticated: true,
-    verified: true,
+	authenticated: true,
+	verified: true,
 });
 ```
 
@@ -336,7 +336,7 @@ the `$and` operator may seem to be useless at first, as the query can be done wi
 ```js
 // at least one of the provided queries should pass to select the potato object
 const users = await Users.findMany({
-    $or: [{ name: "Swordax" }, { name: "Vazox" }],
+	$or: [{ name: "Swordax" }, { name: "Vazox" }],
 });
 ```
 
@@ -345,7 +345,7 @@ const users = await Users.findMany({
 ```js
 // none of the provided queries should pass to select the potato object
 const users = await Users.findMany({
-    $nor: [{ deactivated: true }, { blocked: true }],
+	$nor: [{ deactivated: true }, { blocked: true }],
 });
 ```
 
@@ -353,11 +353,11 @@ You could nest logical operators to create powerful queries:
 
 ```js
 const users = await Users.findMany({
-    $or: [
-        { $and: [queryObject_1, queryObject_2] },
-        { $and: [queryObject_3, queryObject_4] },
-        { $nor: [queryObject_5, queryObject_6] },
-    ],
+	$or: [
+		{ $and: [queryObject_1, queryObject_2] },
+		{ $and: [queryObject_3, queryObject_4] },
+		{ $nor: [queryObject_5, queryObject_6] },
+	],
 });
 ```
 
@@ -418,7 +418,7 @@ await Users.findMany({ hobbies: { $all: ["Coding", "Swimming"] } });
 // gets users that have the exact subdocument {subject:"Programming", gpa:4}
 // inside their classes array field
 await Users.findMany({
-    classes: { $elemMatch: { subject: "Programming", gpa: 4 } },
+	classes: { $elemMatch: { subject: "Programming", gpa: 4 } },
 });
 ```
 
@@ -439,8 +439,8 @@ The following example access the `height` nested property and updates it's value
 
 ```js
 await Users.updateOne(
-    { name: "Swordax" },
-    { "physicalTraits.body.height": 184 }
+	{ name: "Swordax" },
+	{ "physicalTraits.body.height": 184 }
 );
 ```
 
@@ -448,7 +448,7 @@ Another way that can be used to update potatoes is update functions. Update func
 
 ```js
 await Users.updateOne({ username: "Swordax" }, (user) => {
-    user.token = Math.floor(Math.random() * 11);
+	user.token = Math.floor(Math.random() * 11);
 });
 ```
 
@@ -460,8 +460,8 @@ The following example uses the `$push` operator to push "Arabic" language into t
 
 ```js
 await Users.updateMany(
-    { nationality: "Syria" },
-    { $push: { languages: "Arabic" } }
+	{ nationality: "Syria" },
+	{ $push: { languages: "Arabic" } }
 );
 ```
 
@@ -469,13 +469,13 @@ You could also push to multiple array fields:
 
 ```js
 await Users.updateMany(
-    { nationality: "Syria" },
-    {
-        $push: {
-            languages: "Arabic",
-            hobbies: "Dabka Dance",
-        },
-    }
+	{ nationality: "Syria" },
+	{
+		$push: {
+			languages: "Arabic",
+			hobbies: "Dabka Dance",
+		},
+	}
 );
 ```
 
@@ -483,15 +483,15 @@ You could use multiple update operators at the same time:
 
 ```js
 await Users.updateMany(
-    { nationality: "Syria" },
-    {
-        $push: {
-            languages: "Arabic",
-        },
-        $inc: {
-            age: 1,
-        },
-    }
+	{ nationality: "Syria" },
+	{
+		$push: {
+			languages: "Arabic",
+		},
+		$inc: {
+			age: 1,
+		},
+	}
 );
 ```
 
@@ -513,24 +513,24 @@ A projection object takes field names as keys, and zeros or ones as values. Fiel
 
 ```js
 const users_with_ids_and_names_and_ages = await Users.findMany(
-    {},
-    {
-        project: {
-            _id: 1, // will include _id field in results
-            name: 1, // will include name field in results
-            age: 1, // will include age field in results
-        }, // all other fields will be excluded from the results
-    }
+	{},
+	{
+		project: {
+			_id: 1, // will include _id field in results
+			name: 1, // will include name field in results
+			age: 1, // will include age field in results
+		}, // all other fields will be excluded from the results
+	}
 );
 
 const users_without_timestamps = await Users.findMany(
-    {},
-    {
-        project: {
-            createdAt: 0, // will exclude createdAt field in results
-            updatedAt: 0, // will exclude updatedAt field in results
-        },
-    } // all other fields will be included in the results
+	{},
+	{
+		project: {
+			createdAt: 0, // will exclude createdAt field in results
+			updatedAt: 0, // will exclude updatedAt field in results
+		},
+	} // all other fields will be included in the results
 );
 ```
 
@@ -555,109 +555,109 @@ setRoot(__dirname, "databases");
 // create project database and users farm
 let DB, Users;
 (async () => {
-    DB = await createDatabase("DB", false);
-    Users = await DB.createFarm("Users", {
-        identifications: true,
-        timestamps: true,
-    });
+	DB = await createDatabase("DB", false);
+	Users = await DB.createFarm("Users", {
+		identifications: true,
+		timestamps: true,
+	});
 
-    // listen to server requests
-    app.listen(3000, () => {
-        console.log("Server running on port 3000");
-    });
+	// listen to server requests
+	app.listen(3000, () => {
+		console.log("Server running on port 3000");
+	});
 })();
 
 // create user
 app.post("/create-user", async (req, res) => {
-    try {
-        const user = await Users.insertOne(req.body);
-        res.status(200).json({ success: true, userId: user._id });
-    } catch (err) {
-        console.log(err);
-        res.status(400).json({ success: false, error: err.message });
-    }
+	try {
+		const user = await Users.insertOne(req.body);
+		res.status(200).json({ success: true, userId: user._id });
+	} catch (err) {
+		console.log(err);
+		res.status(400).json({ success: false, error: err.message });
+	}
 });
 
 // get user
 app.get("/get-user", async (req, res) => {
-    try {
-        const user = await Users.findOne({ username: req.body.username });
-        res.status(200).json({ success: true, user });
-    } catch (err) {
-        console.log(err);
-        res.status(400).json({ success: false, error: err.message });
-    }
+	try {
+		const user = await Users.findOne({ username: req.body.username });
+		res.status(200).json({ success: true, user });
+	} catch (err) {
+		console.log(err);
+		res.status(400).json({ success: false, error: err.message });
+	}
 });
 
 // get users (implementing pagination)
 app.get("/get-users/:pageNumber", async (req, res) => {
-    const resultsPerPage = 10;
+	const resultsPerPage = 10;
 
-    try {
-        /*
+	try {
+		/*
             1- implement pagination using skip and limit options
             2- show most recent data first
             3- sort data according to "user.personalInformation.age" field in ascending order
         */
 
-        const users = await Users.findMany(
-            {},
-            {
-                skip: resultsPerPage * (req.params.pageNumber - 1),
-                limit: resultsPerPage,
-                recent: true,
-                sort: {
-                    "personalInformation.age": 1,
-                },
-            }
-        );
+		const users = await Users.findMany(
+			{},
+			{
+				skip: resultsPerPage * (req.params.pageNumber - 1),
+				limit: resultsPerPage,
+				recent: true,
+				sort: {
+					"personalInformation.age": 1,
+				},
+			}
+		);
 
-        res.status(200).json({ success: true, users });
-    } catch (err) {
-        console.log(err);
-        res.status(400).json({ success: false, error: err.message });
-    }
+		res.status(200).json({ success: true, users });
+	} catch (err) {
+		console.log(err);
+		res.status(400).json({ success: false, error: err.message });
+	}
 });
 
 // update username
 app.patch("/update-username", async (req, res) => {
-    try {
-        const updatedUser = await User.updateOne(
-            {
-                username: req.body.username,
-            },
-            {
-                username: req.body.newUsername,
-            },
-            true // get post-updated user object
-        );
+	try {
+		const updatedUser = await User.updateOne(
+			{
+				username: req.body.username,
+			},
+			{
+				username: req.body.newUsername,
+			},
+			true // get post-updated user object
+		);
 
-        res.status(200).json({ success: true, updatedUser });
-    } catch (err) {
-        console.log(err);
-        res.status(400).json({ success: false, error: err.message });
-    }
+		res.status(200).json({ success: true, updatedUser });
+	} catch (err) {
+		console.log(err);
+		res.status(400).json({ success: false, error: err.message });
+	}
 });
 
 // delete user
 app.delete("/delete-user/:userId", async (req, res) => {
-    try {
-        const deletedUser = await User.deleteOne({ _id: req.params.userId });
-        res.status(200).json({ success: true, deletedUser });
-    } catch (err) {
-        console.log(err);
-        res.status(400).json({ success: false, error: err.message });
-    }
+	try {
+		const deletedUser = await User.deleteOne({ _id: req.params.userId });
+		res.status(200).json({ success: true, deletedUser });
+	} catch (err) {
+		console.log(err);
+		res.status(400).json({ success: false, error: err.message });
+	}
 });
 ```
 
 ## Contact
 
-Swordax Contacts:
+My Contacts:
 
+-   email: moh.bakour@outlook.com
+-   linkedin: https://linkedin.com/in/mohbakour
+-   github: https://github.com/MohBakour
 -   linktr.ee: https://linktr.ee/swordax
 -   discord: https://discord.com/users/465453058667839499/
 -   discord username: swordax
--   email: swordax.sy@gmail.com
--   social media at: @swordax.sy
--   github: https://github.com/SwordaxSy
