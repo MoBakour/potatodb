@@ -3,7 +3,6 @@
  * Copyrights(c) 2022-present MohBakour
  *
  * @author MohBakour <moh.bakour@outlook.com>
- * @version 1.0.0
  *
  * github: https://github.com/MohBakour
  * linkedin: https://linkedin.com/in/mohbakour

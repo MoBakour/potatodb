@@ -26,6 +26,6 @@
 -   Added $elemMatch query operator
 -   Added result projection
 
-## [1.0.0] - 2024-5-16
+## [1.0.1] - 2024-5-16
 
--   Published v1.0.0 to npm
+-   Published v1.0.1 to npm
