@@ -5,7 +5,7 @@
 	<br>
 	A nodejs filesystem json database system.
 	<br>
-	By <a href="https://linkedin.com/in/mohbakour">Mohamed Bakour</a>
+	By <a href="https://linkedin.com/in/mobakour">MoBakour</a>
 </p>
 
 ## About
@@ -655,9 +655,9 @@ app.delete("/delete-user/:userId", async (req, res) => {
 
 My Contacts:
 
--   email: moh.bakour@outlook.com
--   linkedin: https://linkedin.com/in/mohbakour
--   github: https://github.com/MohBakour
+-   email: mo.bakour@outlook.com
+-   linkedin: https://linkedin.com/in/mobakour
+-   github: https://github.com/MoBakour
 -   linktr.ee: https://linktr.ee/swordax
 -   discord: https://discord.com/users/465453058667839499/
 -   discord username: swordax

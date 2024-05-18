@@ -28,4 +28,4 @@
 
 ## [1.0.1] - 2024-5-16
 
--   Published v1.0.1 to npm
+-   Published v1 to npm
