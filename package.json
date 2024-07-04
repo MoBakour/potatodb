@@ -1,21 +1,21 @@
 {
-	"name": "potatodb",
-	"version": "1.0.3",
-	"description": "A nodejs filesystem json database system",
-	"keywords": [
-		"potatodb",
-		"potato",
-		"database",
-		"filesystem",
-		"nodejs",
-		"javascript",
-		"nosql"
-	],
-	"author": "MoBakour",
-	"license": "ISC",
-	"main": "index.js",
-	"directories": {
-		"lib": "lib"
-	},
-	"repository": "MoBakour/potatodb"
+    "name": "potatodb",
+    "version": "1.0.4",
+    "description": "A nodejs filesystem json database system",
+    "keywords": [
+        "potatodb",
+        "potato",
+        "database",
+        "filesystem",
+        "nodejs",
+        "javascript",
+        "nosql"
+    ],
+    "author": "MoBakour",
+    "license": "ISC",
+    "main": "index.js",
+    "directories": {
+        "lib": "lib"
+    },
+    "repository": "MoBakour/potatodb"
 }

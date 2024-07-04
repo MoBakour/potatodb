@@ -29,3 +29,15 @@
 ## [1.0.1] - 2024-5-16
 
 -   Published v1 to npm
+
+## [1.0.2] - 2024-5-16
+
+-   Fixed issues in package metadata
+
+## [1.0.3] - 2024-5-16
+
+-   Fixed issues in package metadata
+
+## [1.0.4] - 2024-7-4
+
+-   Fixed a bug in query logic
