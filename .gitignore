@@ -1,1 +1,6 @@
-example.test.js
+*.test.js
+test.js
+.env
+/node_modules
+dist
+/test_database

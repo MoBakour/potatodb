@@ -1,6 +1,6 @@
 {
     "name": "potatodb",
-    "version": "1.0.4",
+    "version": "1.1.0",
     "description": "A nodejs filesystem json database system",
     "keywords": [
         "potatodb",
@@ -14,6 +14,7 @@
     "author": "MoBakour",
     "license": "ISC",
     "main": "index.js",
+    "types": "index.d.ts",
     "directories": {
         "lib": "lib"
     },

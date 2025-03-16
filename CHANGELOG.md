@@ -41,3 +41,26 @@
 ## [1.0.4] - 2024-7-4
 
 -   Fixed a bug in query logic
+
+## [-----] - 2025-3-16
+
+-   Added typescript support
+-   Added support for regular expressions in queries
+-   Added Farm.sampleOne, Farm.sampleMany, and Farm.sampleManyUnique for random sampling
+-   Added Farm.exists() for checking resource existence
+-   Added populating option to find and update operations
+-   Added support for sorting updateMany results
+-   Added $pop array update operator
+
+-   Enhanced error handling
+-   Enhanced type support and documentation with JSDocs
+
+-   findOne, deleteOne, and updateOne operations now return null instead of undefined if no document was affected
+-   Renamed project option to select
+-   Renamed identification to id
+-   Made timestamps off by default
+
+-   Default root will be the root directory of the project rather than the directory of the file where setRoot was called
+-   setRoot is no longer required, but will be available for customization
+
+-   Fixed error that pops up when trying to update an inexistent document with updateOne method

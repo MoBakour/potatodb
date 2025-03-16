@@ -16,7 +16,7 @@ let DB, User;
 (async () => {
     DB = await createDatabase("DB", false);
     User = await DB.createFarm("Users", {
-        identifications: true,
+        id: true,
         timestamps: true,
     });
 
@@ -42,7 +42,7 @@ app.get("/get-user", async (req, res) => {
     try {
         const user = await User.findOne(
             { username: req.body.username },
-            { project: { password: 0 } }
+            { select: { password: 0 } }
         );
         res.status(200).json({ success: true, user });
     } catch (err) {
@@ -71,7 +71,7 @@ app.get("/get-users/:pageNumber", async (req, res) => {
                 sort: {
                     "personalInformation.age": 1,
                 },
-                project: {
+                select: {
                     password: 0,
                 },
             }
@@ -96,7 +96,7 @@ app.patch("/update-username", async (req, res) => {
             },
             {
                 updated: true,
-                project: {
+                select: {
                     password: 0,
                 },
             }
@@ -114,7 +114,7 @@ app.delete("/delete-user/:userId", async (req, res) => {
     try {
         const deletedUser = await User.deleteOne(
             { _id: req.params.userId },
-            { project: { password: 0 } }
+            { select: { password: 0 } }
         );
         res.status(200).json({ success: true, deletedUser });
     } catch (err) {

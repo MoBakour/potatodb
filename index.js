@@ -4,11 +4,11 @@
  *
  * @author Mohamed Bakour <mo.bakour@outlook.com>
  *
- * github: https://github.com/MoBakour
- * linkedin: https://linkedin.com/in/mobakour
- * discord: https://discord.com/users/465453058667839499/
- * discord username: swordax
- * linktr.ee: https://linktr.ee/swordax
+ * portfolio:   https://bakour.dev
+ * github:      https://github.com/MoBakour
+ * linkedin:    https://linkedin.com/in/mobakour
+ * discord:     https://discord.com/users/465453058667839499/
+ * discord      username: swordax
  *
  * PotatoDB github repo: https://github.com/MoBakour/potatodb
  */
