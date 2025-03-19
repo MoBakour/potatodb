@@ -4,21 +4,27 @@ const { setRoot, createDatabase } = require("potatodb");
 const app = express();
 
 // configure express app
-app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // set potatodb root
-setRoot(__dirname, "databases");
+setRoot({
+    rootPath: process.cwd(),
+    rootName: "databases",
+});
 
 // create project database and users farm
-let DB, User;
+let DB, Users, Posts;
 (async () => {
     DB = await createDatabase("DB", false);
-    User = await DB.createFarm("Users", {
-        id: true,
+
+    const farmOptions = {
+        _id: true,
         timestamps: true,
-    });
+    };
+
+    Users = await DB.createFarm("Users", farmOptions);
+    Posts = await DB.createFarm("Posts", farmOptions);
 
     // listen to server requests
     app.listen(3000, () => {
@@ -29,10 +35,10 @@ let DB, User;
 // create user
 app.post("/create-user", async (req, res) => {
     try {
-        const user = await User.insertOne(req.body);
+        const user = await Users.insertOne(req.body);
         res.status(200).json({ success: true, userId: user._id });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(400).json({ success: false, error: err.message });
     }
 });
@@ -40,13 +46,17 @@ app.post("/create-user", async (req, res) => {
 // get user
 app.get("/get-user", async (req, res) => {
     try {
-        const user = await User.findOne(
+        const user = await Users.findOne(
             { username: req.body.username },
-            { select: { password: 0 } }
+            {
+                select: {
+                    password: 0,
+                },
+            }
         );
         res.status(200).json({ success: true, user });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(400).json({ success: false, error: err.message });
     }
 });
@@ -59,17 +69,17 @@ app.get("/get-users/:pageNumber", async (req, res) => {
         /*
             1- implement pagination using skip and limit options
             2- show most recent data first
-            3- sort data according to "user.personalInformation.age" field in ascending order
+            3- sort data according to "user.personal_information.age" field in ascending order
         */
 
-        const users = await User.findMany(
+        const users = await Users.findMany(
             {},
             {
                 skip: resultsPerPage * (req.params.pageNumber - 1),
                 limit: resultsPerPage,
                 recent: true,
                 sort: {
-                    "personalInformation.age": 1,
+                    "personal_information.age": 1,
                 },
                 select: {
                     password: 0,
@@ -79,7 +89,7 @@ app.get("/get-users/:pageNumber", async (req, res) => {
 
         res.status(200).json({ success: true, users });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(400).json({ success: false, error: err.message });
     }
 });
@@ -104,21 +114,47 @@ app.patch("/update-username", async (req, res) => {
 
         res.status(200).json({ success: true, updatedUser });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(400).json({ success: false, error: err.message });
     }
 });
 
-// delete user
-app.delete("/delete-user/:userId", async (req, res) => {
+// publish post
+app.post("/post", async (req, res) => {
     try {
-        const deletedUser = await User.deleteOne(
-            { _id: req.params.userId },
-            { select: { password: 0 } }
-        );
-        res.status(200).json({ success: true, deletedUser });
+        const postObject = {
+            ...req.body,
+            owner: req.user._id,
+        };
+
+        const post = await Posts.insertOne(postObject);
+        res.status(200).json({ success: true, postId: post._id });
     } catch (err) {
-        console.log(err);
+        console.error(err);
+        res.status(400).json({ success: false, error: err.message });
+    }
+});
+
+// find post
+app.get("/post/:postId", async (req, res) => {
+    try {
+        const post = await Posts.findOne(
+            { _id: req.params.postId },
+            {
+                populate: {
+                    owner: Users,
+                },
+                select: {
+                    post_token: 0,
+                    owner: {
+                        password: 0,
+                    },
+                },
+            }
+        );
+        res.status(200).json({ success: true, post });
+    } catch (err) {
+        console.error(err);
         res.status(400).json({ success: false, error: err.message });
     }
 });

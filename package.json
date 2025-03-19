@@ -12,7 +12,7 @@
         "nosql"
     ],
     "author": "MoBakour",
-    "license": "ISC",
+    "license": "MIT",
     "main": "index.js",
     "types": "index.d.ts",
     "directories": {

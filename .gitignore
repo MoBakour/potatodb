@@ -1,6 +1,6 @@
-*.test.js
-test.js
-.env
 /node_modules
+.env
 dist
 /test_database
+test.js
+*.test.js

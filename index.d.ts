@@ -1,47 +1,95 @@
 declare module "potatodb" {
-    export function setRoot(rootPath: string, rootName?: string): void;
+    // INTERFACES & TYPES
+    export interface RootOptions {
+        rootPath?: string;
+        rootName?: string;
+    }
+
+    export interface FarmOptions {
+        _id?: boolean;
+        timestamps?: boolean;
+    }
+
+    interface WithId {
+        _id?: string;
+    }
+
+    interface WithTimestamps {
+        createdAt?: number;
+        updatedAt?: number;
+    }
+
+    export interface PreFindInterceptorOptions {
+        recent?: boolean;
+        skip?: number;
+    }
+
+    export interface PostFindInterceptorOptions {
+        limit?: number;
+        sort?: Object;
+        select?: Object;
+        populate?: Object;
+    }
+
+    export interface PostUpdateInterceptorOptions {
+        sort?: Object;
+        select?: Object;
+        populate?: Object;
+    }
+
+    export type FindOptions = PreFindInterceptorOptions &
+        PostFindInterceptorOptions;
+
+    export type UpdateOptions = PostUpdateInterceptorOptions & {
+        updated?: boolean;
+    };
+
+    export type DeleteOptions = { select?: Object };
+
+    // FUNCTIONS
+    export function setRoot(options: RootOptions): void;
 
     export function createDatabase(
         dbName: string,
         overwrite?: boolean
     ): PotatoDB;
 
+    // CLASSES
+
     export class PotatoDB {
         public dbRoot: string;
         public dbPath: string;
         public dbName: string;
-        public farms: Farm<any>[];
+        public farms: string[];
         public overwrite: boolean;
 
         constructor(dbName: string, overwrite: boolean);
 
-        public createFarm<T>(farmName: string): Farm<T & { _id?: string }>;
+        public createFarm<T>(
+            farmName: string,
+            options?: { _id?: true; timestamps?: false }
+        ): Farm<T & WithId>;
 
         public createFarm<T>(
             farmName: string,
-            options: { id: false; timestamps?: false }
+            options?: { _id?: true; timestamps?: true }
+        ): Farm<T & WithId & WithTimestamps>;
+
+        public createFarm<T>(
+            farmName: string,
+            options?: { _id?: false; timestamps?: false }
         ): Farm<T>;
 
         public createFarm<T>(
             farmName: string,
-            options: { id: false; timestamps: true }
-        ): Farm<T & { createdAt?: Date; updatedAt?: Date }>;
-
-        public createFarm<T>(
-            farmName: string,
-            options: { id?: true; timestamps?: false }
-        ): Farm<T & { _id?: string }>;
-
-        public createFarm<T>(
-            farmName: string,
-            options: { id?: true; timestamps: true }
-        ): Farm<T & { _id?: string; createdAt?: Date; updatedAt?: Date }>;
+            options?: { _id?: false; timestamps?: true }
+        ): Farm<T & WithTimestamps>;
 
         public dropDatabase(): void;
     }
 
     export class PotatoArray extends Array {
-        sort(compareFn?: (a: any, b: any) => number): this;
+        sort(sorter?: ((a: any, b: any) => number) | Function): this;
     }
 
     export class PotatoId {
@@ -49,8 +97,8 @@ declare module "potatodb" {
     }
 
     export class PotatoTimestamps {
-        public createdAt: Date;
-        public updatedAt: Date;
+        public createdAt: number;
+        public updatedAt: number;
     }
 
     export class PotatoError extends Error {
@@ -61,13 +109,14 @@ declare module "potatodb" {
         public farmName: string;
         public farmPath: string;
         public dbName: string;
-        public id: boolean;
+        public _id: boolean;
         public timestamps: boolean;
 
         constructor(
             farmName: string,
+            farmPath: string,
             dbName: string,
-            id: boolean,
+            _id: boolean,
             timestamps: boolean
         );
 
@@ -169,31 +218,4 @@ declare module "potatodb" {
 
         public sampleManyUnique(count: number): Promise<T[]>;
     }
-
-    export interface PreFindInterceptorOptions {
-        recent?: boolean;
-        skip?: number;
-    }
-
-    export interface PostFindInterceptorOptions {
-        limit?: number;
-        sort?: Object;
-        select?: Object;
-        populate?: Object;
-    }
-
-    export interface PostUpdateInterceptorOptions {
-        sort?: Object;
-        select?: Object;
-        populate?: Object;
-    }
-
-    export type FindOptions = PreFindInterceptorOptions &
-        PostFindInterceptorOptions;
-
-    export type UpdateOptions = PostUpdateInterceptorOptions & {
-        updated?: boolean;
-    };
-
-    export type DeleteOptions = { select?: Object };
 }
