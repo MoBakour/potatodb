@@ -92,7 +92,7 @@ const Farm = DB.createFarm("Farm", {
 Available options:
 
 -   `_id`
-    Speicifes whether the potatoes (documents in NoSQL or records in SQL) inside the farm should be stamped with identification strings or not. (defaults to true)
+    Specifies whether the potatoes (documents in NoSQL or records in SQL) inside the farm should be stamped with identification strings or not. (defaults to true)
 -   `timestamps`
     Specifies whether the potatoes (document in NoSQL or records in SQL) inside the farm should be stamped with timestamps (createdAt and updatedAt). Timestamps contain numerical timestamps that point to the time when the potato object was first created and lastly updated. (defaults to false)
 
@@ -173,7 +173,7 @@ await Farm.updateOne({ name: "Swordax" }, { age: 2 }, { updated: true });
 
 #### Farm.updateMany
 
-The `updateMany()` method is a farm method used to update mulitple potatoes. The method takes three arguments: first is a query object or a test function, second is an updates object or an update function, and third is an options object.
+The `updateMany()` method is a farm method used to update multiple potatoes. The method takes three arguments: first is a query object or a test function, second is an updates object or an update function, and third is an options object.
 
 ```js
 await Farm.updateMany((potato) => potato.age >= 18, { authorized: false });
@@ -249,7 +249,7 @@ const randomUniqueDocuments = await Farm.sampleManyUnique(5);
 
 #### Farm.exists
 
-The `exists()` method is a farm method that takes a query object or a test function and returns a boolean value that specified whether a potato document that passes the given test exists or not. This method uses `Farm.findOne()` method under the hood, so expect a similar querying behaviour.
+The `exists()` method is a farm method that takes a query object or a test function and returns a boolean value that specified whether a potato document that passes the given test exists or not. This method uses `Farm.findOne()` method under the hood, so expect a similar querying behavior.
 
 ```js
 const exists = await Users.exists({ email: "example@mail.com" });
@@ -286,7 +286,7 @@ These options allow you to customize query behavior when retrieving, updating, o
 
 #### Principles of Querying with PotatoDB
 
-Finding, updating, and deleteing methods of PotatoDB farms all require querying to select potatoes to return or apply changes on. Querying with PotatoDB can be done in two ways: First is object querying by providing a query object. Second is functional querying by providing a test function to be used in querying. PotatoDB supports regular expressions in query objects as well.
+Finding, updating, and deleting methods of PotatoDB farms all require querying to select potatoes to return or apply changes on. Querying with PotatoDB can be done in two ways: First is object querying by providing a query object. Second is functional querying by providing a test function to be used in querying. PotatoDB supports regular expressions in query objects as well.
 
 -   `{ username: "Swordax" }` - A query object that selects potatoes with a username of "Swordax"
 -   `{ age: 18 }` - A query object that selects potatoes with an age of 18
@@ -331,7 +331,7 @@ const data = await Users.findOne((user) => {
 
 #### Query Operators
 
-PotatoDB provides query operators that can be used in query objects when querying data. Query operators can help you build flexible reachy query objects instead of having to build a custom test function.
+PotatoDB provides query operators that can be used in query objects when querying data. Query operators can help you build flexible query objects instead of having to build a custom test function.
 
 The following example uses two of the query operators (`$gte` and `$lt`) to select users that are more than or equal to eighteen years old, and those who are less than eighteen years old:
 
@@ -480,7 +480,7 @@ await Users.updateOne({ name: "Swordax" }, { age: 2 });
 await Users.updateOne({ name: "Alxa" }, { age: 0, isHuman: true });
 ```
 
-Updating nested properties can be done by accessing these nested fields thorugh a string path in the update object. Key names should be separated with dots.
+Updating nested properties can be done by accessing these nested fields through a string path in the update object. Key names should be separated with dots.
 
 The following example access the `height` nested property and updates it's value:
 
@@ -491,7 +491,7 @@ await Users.updateOne(
 );
 ```
 
-Another way that can be used to update potatoes is update functions. Update functions are custom functions that can be designed to update the potatoes in any way you desire. Update functions give you more flexibility in updating potatoes rather than limiting the possiblities with update objects.
+Another way that can be used to update potatoes is update functions. Update functions are custom functions that can be designed to update the potatoes in any way you desire. Update functions give you more flexibility in updating potatoes rather than limiting the possibilities with update objects.
 
 ```js
 await Users.updateOne({ username: "Swordax" }, (user) => {
@@ -602,13 +602,13 @@ const posts_with_users = await Posts.findMany(
 
 #### Population
 
-PotatoDB allows referencing fields from other farms by refering to them with their `_id` number. When getting the parent document, you can populate the refernced field with the actual document using the `populate` option available in find, update, and delete methods options.
+PotatoDB allows referencing fields from other farms by referring to them with their `_id` number. When getting the parent document, you can populate the referenced field with the actual document using the `populate` option available in find, update, and delete methods options.
 
-To populate a referenced field, you should pass the `populate` option an object with key:value properties. The key represent the name of the field to populate, and the value should the instance of the farm that contains the target document.
+To populate a referenced field, you should pass the `populate` option an object with key:value properties. The key represents the field name that contains the reference, and the value should be the farm instance that holds the referenced document.
 
 Note that it is possible to reference and populate multiple fields at once.
 
-Example demonstrating how to use referncing and populating in PotatoDB:
+Example demonstrating how to use referencing and populating in PotatoDB:
 
 ```js
 // create farms
@@ -626,7 +626,7 @@ const post = await Posts.insertOne({
 });
 
 // find post potato and populate owner field
-const retrieved_post = await Posts.findOne(
+const retrievedPost = await Posts.findOne(
     { _id: post._id },
     {
         populate: {
