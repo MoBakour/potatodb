@@ -42,7 +42,7 @@
 
 -   Fixed a bug in query logic
 
-## [1.1.0] - 2025-3-19
+## [1.1.0] - 2025-3-20
 
 -   Added typescript support
 -   Added support for regular expressions in queries

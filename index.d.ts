@@ -1,5 +1,7 @@
 declare module "potatodb" {
-    // INTERFACES & TYPES
+    // CONFIG TYPES
+    export type GenericObject = Record<string, any>;
+
     export interface RootOptions {
         rootPath?: string;
         rootName?: string;
@@ -19,6 +21,7 @@ declare module "potatodb" {
         updatedAt?: number;
     }
 
+    // INTERCEPTOR TYPES
     export interface PreFindInterceptorOptions {
         recent?: boolean;
         skip?: number;
@@ -26,25 +29,63 @@ declare module "potatodb" {
 
     export interface PostFindInterceptorOptions {
         limit?: number;
-        sort?: Object;
-        select?: Object;
-        populate?: Object;
+        sort?: GenericObject;
+        select?: GenericObject;
+        populate?: GenericObject;
     }
 
     export interface PostUpdateInterceptorOptions {
-        sort?: Object;
-        select?: Object;
-        populate?: Object;
+        sort?: GenericObject;
+        select?: GenericObject;
+        populate?: GenericObject;
     }
 
-    export type FindOptions = PreFindInterceptorOptions &
-        PostFindInterceptorOptions;
+    // METHOD TYPES
+    export interface FindOneOptions {
+        skip?: number;
+        recent?: boolean;
+        select?: GenericObject;
+        populate?: GenericObject;
+    }
 
-    export type UpdateOptions = PostUpdateInterceptorOptions & {
+    export interface FindManyOptions {
+        limit?: number;
+        skip?: number;
+        recent?: boolean;
+        sort?: GenericObject;
+        select?: GenericObject;
+        populate?: GenericObject;
+    }
+
+    export interface UpdateOneOptions {
+        select?: GenericObject;
+        populate?: GenericObject;
         updated?: boolean;
-    };
+    }
 
-    export type DeleteOptions = { select?: Object };
+    export interface UpdateManyOptions {
+        sort?: GenericObject;
+        select?: GenericObject;
+        populate?: GenericObject;
+        updated?: boolean;
+    }
+
+    export interface DeleteOneOptions {
+        select?: GenericObject;
+        populate?: GenericObject;
+    }
+
+    export interface DeleteManyOptions {
+        sort?: GenericObject;
+        select?: GenericObject;
+        populate?: GenericObject;
+    }
+
+    // QUERY AND UPDATE TYPES
+    export type TestFunction = (potato: GenericObject) => boolean;
+    export type Test = GenericObject | TestFunction;
+    export type UpdateFunction = (potato: GenericObject) => GenericObject;
+    export type Update = GenericObject | UpdateFunction;
 
     // FUNCTIONS
     export function setRoot(options: RootOptions): void;
@@ -89,7 +130,7 @@ declare module "potatodb" {
     }
 
     export class PotatoArray extends Array {
-        sort(sorter?: ((a: any, b: any) => number) | Function): this;
+        sort(sorter?: ((a: any, b: any) => number) | GenericObject): this;
     }
 
     export class PotatoId {
@@ -121,30 +162,27 @@ declare module "potatodb" {
         );
 
         private static nestedUpdate(
-            object: Object,
+            object: GenericObject,
             path: string,
             val: any
         ): void;
 
-        private static transform(test: Object | Function): Function;
+        private static transform(test: Test): TestFunction;
 
-        private static validateQuery(
-            caller: string,
-            test: Object | Function
-        ): Object;
+        private static validateQuery(caller: string, test: Test): Test;
 
-        private getData(): Promise<Object[]>;
+        private getData(): Promise<T[]>;
 
         private static preInterceptor(
-            data: Object[],
+            data: GenericObject[],
             options?: PreFindInterceptorOptions
-        ): Object[];
+        ): GenericObject[];
 
         private static postInterceptor(
             caller: string,
-            result: Object | Object[],
+            result: GenericObject | GenericObject[],
             options?: PostFindInterceptorOptions | PostUpdateInterceptorOptions
-        ): Promise<Object | Object[]>;
+        ): Promise<GenericObject | GenericObject[]>;
 
         public dropFarm(): void;
 
@@ -161,56 +199,53 @@ declare module "potatodb" {
 
         private findLogic(
             caller: "findOne" | "findMany",
-            test?: Object | Function,
-            options?: FindOptions
+            test?: Test,
+            options?: FindOneOptions | FindManyOptions
         ): Promise<T | T[] | null>;
 
         public findOne(
-            test?: Object | Function,
-            options?: FindOptions
+            test?: Test,
+            options?: FindOneOptions
         ): Promise<T | null>;
 
-        public findMany(
-            test?: Object | Function,
-            options?: FindOptions
-        ): Promise<T[]>;
+        public findMany(test?: Test, options?: FindManyOptions): Promise<T[]>;
 
         private updateLogic(
             caller: "updateOne" | "updateMany",
-            test: Object | Function,
-            update: Object | Function,
-            options?: UpdateOptions
+            test: Test,
+            update: Update,
+            options?: UpdateOneOptions | UpdateManyOptions
         ): Promise<T | T[] | null>;
 
         public updateOne(
-            test: Object | Function,
-            update: Object | Function,
-            options?: UpdateOptions
+            test: Test,
+            update: Update,
+            options?: UpdateOneOptions
         ): Promise<T | null>;
 
         public updateMany(
-            test: Object | Function,
-            update: Object | Function,
-            options?: UpdateOptions
+            test: Test,
+            update: Update,
+            options?: UpdateManyOptions
         ): Promise<T[]>;
 
         private deleteLogic(
             caller: "deleteOne" | "deleteMany",
-            test?: Object | Function,
-            options?: DeleteOptions
+            test?: Test,
+            options?: DeleteOneOptions | DeleteManyOptions
         ): Promise<T | T[] | null>;
 
         public deleteOne(
-            test?: Object | Function,
-            options?: DeleteOptions
+            test?: Test,
+            options?: DeleteOneOptions
         ): Promise<T | null>;
 
         public deleteMany(
-            test?: Object | Function,
-            options?: DeleteOptions
+            test?: Test,
+            options?: DeleteManyOptions
         ): Promise<T[]>;
 
-        public exists(test: Object | Function): Promise<boolean>;
+        public exists(test: Test): Promise<boolean>;
 
         public sampleOne(): Promise<T | null>;
 
