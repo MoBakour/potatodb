@@ -5,7 +5,9 @@ let DB, Users, Posts;
 
 beforeAll(async () => {
     setRoot({ rootName: "test_database" });
-    DB = createDatabase("DB", false);
+    DB = createDatabase("DB", {
+        overwrite: true,
+    });
     Users = DB.createFarm("Users", {
         _id: true,
         timestamps: true,

@@ -2,3 +2,4 @@
 .env
 dist
 /test_database
+testing.js

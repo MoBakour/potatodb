@@ -16,7 +16,9 @@ setRoot({
 // create project database and users farm
 let DB, Users, Posts;
 (async () => {
-    DB = await createDatabase("DB", false);
+    DB = await createDatabase("DB", {
+        overwrite: false,
+    });
 
     const farmOptions = {
         _id: true,

@@ -7,6 +7,10 @@ declare module "potatodb" {
         rootName?: string;
     }
 
+    export interface DatabaseOptions {
+        overwrite?: boolean;
+    }
+
     export interface FarmOptions {
         _id?: boolean;
         timestamps?: boolean;
@@ -92,7 +96,7 @@ declare module "potatodb" {
 
     export function createDatabase(
         dbName: string,
-        overwrite?: boolean
+        options?: DatabaseOptions
     ): PotatoDB;
 
     // CLASSES

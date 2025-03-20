@@ -52,23 +52,32 @@ The function takes an options argument.
 
 ```js
 setRoot({
-    rootPath: process.cwd(),
-    rootName: "databases",
+  rootPath: process.cwd(),
+  rootName: "databases",
 });
 ```
 
 Available options:
 
--   `rootPath`: the path to the root directory of where the databases will be stored. Default to the current working directory returned by `process.cwd()`.
--   `rootName`: the name of the directory that will be created to host the databases. Default to "databases".
+- `rootPath`:
+  The path to the root directory of where the databases will be stored. Default to the current working directory returned by `process.cwd()`.
+- `rootName`:
+  The name of the directory that will be created to host the databases. Default to "databases".
 
 #### createDatabase
 
-The `createDatabase()` function creates a database inside the databases directory, where farms (collections) will be contained. PotatoDB allows you to have multiple databases at the same time, all stored inside the databases directory. The `createDatabase()` function takes two arguments: first is the name of the database, and second is a boolean that specifies whether the database should be cleared out and rewritten whenever the server restarts or not (defaults to `false`).
+The `createDatabase()` function creates a database inside the databases directory, where farms (collections) will be contained. PotatoDB allows you to have multiple databases at the same time, all stored inside the databases directory. The `createDatabase()` function takes two arguments: first is the name of the database, and second is an options object.
 
 ```js
-const DB = createDatabase("MyDatabase", false);
+const DB = createDatabase("MyDatabase", {
+  overwrite: false,
+});
 ```
+
+Available options:
+
+- `overwrite`
+  Specifies whether the database should be cleared out and rewritten whenever the server restarts or not. (defaults to `false`)
 
 #### DB.dropDatabase
 
@@ -84,17 +93,17 @@ The `createFarm()` method is a database method returned from the `createDatabase
 
 ```js
 const Farm = DB.createFarm("Farm", {
-    _id: true,
-    timestamps: false,
+  _id: true,
+  timestamps: false,
 });
 ```
 
 Available options:
 
--   `_id`
-    Specifies whether the potatoes (documents in NoSQL or records in SQL) inside the farm should be stamped with identification strings or not. (defaults to true)
--   `timestamps`
-    Specifies whether the potatoes (document in NoSQL or records in SQL) inside the farm should be stamped with timestamps (createdAt and updatedAt). Timestamps contain numerical timestamps that point to the time when the potato object was first created and lastly updated. (defaults to false)
+- `_id`
+  Specifies whether the potatoes (documents in NoSQL or records in SQL) inside the farm should be stamped with identification strings or not. (defaults to true)
+- `timestamps`
+  Specifies whether the potatoes (document in NoSQL or records in SQL) inside the farm should be stamped with timestamps (createdAt and updatedAt). Timestamps contain numerical timestamps that point to the time when the potato object was first created and lastly updated. (defaults to false)
 
 #### Farm.dropFarm
 
@@ -120,16 +129,16 @@ If identifications and timestamps were set on, then the returned potato objects 
 
 ```js
 await Farm.insertMany([
-    {
-        name: "Vazox",
-        age: 2,
-        isHuman: false,
-    },
-    {
-        name: "Alxa",
-        age: 3,
-        isHuman: true,
-    },
+  {
+    name: "Vazox",
+    age: 2,
+    isHuman: false,
+  },
+  {
+    name: "Alxa",
+    age: 3,
+    isHuman: true,
+  },
 ]);
 ```
 
@@ -288,10 +297,10 @@ These options allow you to customize query behavior when retrieving, updating, o
 
 Finding, updating, and deleting methods of PotatoDB farms all require querying to select potatoes to return or apply changes on. Querying with PotatoDB can be done in two ways: First is object querying by providing a query object. Second is functional querying by providing a test function to be used in querying. PotatoDB supports regular expressions in query objects as well.
 
--   `{ username: "Swordax" }` - A query object that selects potatoes with a username of "Swordax"
--   `{ age: 18 }` - A query object that selects potatoes with an age of 18
--   `{ isMarried: true }` - A query object that selects potatoes with an isMarried property set to true
--   `{ name: /^A/ }` - A query object that selects potatoes with a `name` that starts with the letter "A" using a regular expression.
+- `{ username: "Swordax" }` - A query object that selects potatoes with a username of "Swordax"
+- `{ age: 18 }` - A query object that selects potatoes with an age of 18
+- `{ isMarried: true }` - A query object that selects potatoes with an isMarried property set to true
+- `{ name: /^A/ }` - A query object that selects potatoes with a `name` that starts with the letter "A" using a regular expression.
 
 You can query nested properties by using string paths in the query object, nested property keys should be separated with dots.
 
@@ -313,7 +322,7 @@ The following example queries users that have the nested `building` field set to
 
 ```js
 const data = await Users.findMany({
-    "country.city.street.building": "Uptown Building",
+  "country.city.street.building": "Uptown Building",
 });
 ```
 
@@ -323,9 +332,9 @@ The following example queries users that have "Arabic" and "English" languages l
 
 ```js
 const data = await Users.findOne((user) => {
-    return (
-        user.languages.includes("English") && user.languages.includes("Arabic")
-    );
+  return (
+    user.languages.includes("English") && user.languages.includes("Arabic")
+  );
 });
 ```
 
@@ -366,13 +375,13 @@ const underEighteen = await Users.findMany({ age: { $lt: 18 } });
 ```js
 // both provided queries should pass to select the potato object
 const users = await Users.findMany({
-    $and: [{ authenticated: true }, { verified: true }],
+  $and: [{ authenticated: true }, { verified: true }],
 });
 
 // the above is equivalent to this:
 const users = await Users.findMany({
-    authenticated: true,
-    verified: true,
+  authenticated: true,
+  verified: true,
 });
 ```
 
@@ -383,7 +392,7 @@ the `$and` operator may seem to be useless at first, as the query can be done wi
 ```js
 // at least one of the provided queries should pass to select the potato object
 const users = await Users.findMany({
-    $or: [{ name: "Swordax" }, { name: "Vazox" }],
+  $or: [{ name: "Swordax" }, { name: "Vazox" }],
 });
 ```
 
@@ -392,7 +401,7 @@ const users = await Users.findMany({
 ```js
 // none of the provided queries should pass to select the potato object
 const users = await Users.findMany({
-    $nor: [{ deactivated: true }, { blocked: true }],
+  $nor: [{ deactivated: true }, { blocked: true }],
 });
 ```
 
@@ -400,11 +409,11 @@ You could nest logical operators to create powerful queries:
 
 ```js
 const users = await Users.findMany({
-    $or: [
-        { $and: [queryObject_1, queryObject_2] },
-        { $and: [queryObject_3, queryObject_4] },
-        { $nor: [queryObject_5, queryObject_6] },
-    ],
+  $or: [
+    { $and: [queryObject_1, queryObject_2] },
+    { $and: [queryObject_3, queryObject_4] },
+    { $nor: [queryObject_5, queryObject_6] },
+  ],
 });
 ```
 
@@ -465,7 +474,7 @@ await Users.findMany({ hobbies: { $all: ["Coding", "Swimming"] } });
 // gets users that have the exact subdocument {subject:"Programming", gpa:4}
 // inside their classes array field
 await Users.findMany({
-    classes: { $elemMatch: { subject: "Programming", gpa: 4 } },
+  classes: { $elemMatch: { subject: "Programming", gpa: 4 } },
 });
 ```
 
@@ -486,8 +495,8 @@ The following example access the `height` nested property and updates it's value
 
 ```js
 await Users.updateOne(
-    { name: "Swordax" },
-    { "physicalTraits.body.height": 184 }
+  { name: "Swordax" },
+  { "physicalTraits.body.height": 184 }
 );
 ```
 
@@ -495,7 +504,7 @@ Another way that can be used to update potatoes is update functions. Update func
 
 ```js
 await Users.updateOne({ username: "Swordax" }, (user) => {
-    user.token = Math.floor(Math.random() * 11);
+  user.token = Math.floor(Math.random() * 11);
 });
 ```
 
@@ -507,8 +516,8 @@ The following example uses the `$push` operator to push "Arabic" language into t
 
 ```js
 await Users.updateMany(
-    { nationality: "Syria" },
-    { $push: { languages: "Arabic" } }
+  { nationality: "Syria" },
+  { $push: { languages: "Arabic" } }
 );
 ```
 
@@ -516,13 +525,13 @@ You could also push to multiple array fields:
 
 ```js
 await Users.updateMany(
-    { nationality: "Syria" },
-    {
-        $push: {
-            languages: "Arabic",
-            hobbies: "Dabka Dance",
-        },
-    }
+  { nationality: "Syria" },
+  {
+    $push: {
+      languages: "Arabic",
+      hobbies: "Dabka Dance",
+    },
+  }
 );
 ```
 
@@ -530,15 +539,15 @@ You could use multiple update operators at the same time:
 
 ```js
 await Users.updateMany(
-    { nationality: "Syria" },
-    {
-        $push: {
-            languages: "Arabic",
-        },
-        $inc: {
-            age: 1,
-        },
-    }
+  { nationality: "Syria" },
+  {
+    $push: {
+      languages: "Arabic",
+    },
+    $inc: {
+      age: 1,
+    },
+  }
 );
 ```
 
@@ -561,24 +570,24 @@ A selection object takes field names as keys, and zeros or ones as values. Field
 
 ```js
 const users_with_ids_and_names_and_ages = await Users.findMany(
-    {},
-    {
-        select: {
-            _id: 1, // will include _id field in results
-            name: 1, // will include name field in results
-            age: 1, // will include age field in results
-        }, // all other fields will be excluded from the results
-    }
+  {},
+  {
+    select: {
+      _id: 1, // will include _id field in results
+      name: 1, // will include name field in results
+      age: 1, // will include age field in results
+    }, // all other fields will be excluded from the results
+  }
 );
 
 const users_without_timestamps = await Users.findMany(
-    {},
-    {
-        select: {
-            createdAt: 0, // will exclude createdAt field in results
-            updatedAt: 0, // will exclude updatedAt field in results
-        },
-    } // all other fields will be included in the results
+  {},
+  {
+    select: {
+      createdAt: 0, // will exclude createdAt field in results
+      updatedAt: 0, // will exclude updatedAt field in results
+    },
+  } // all other fields will be included in the results
 );
 ```
 
@@ -586,17 +595,17 @@ You can also select nested or populated fields
 
 ```js
 const posts_with_users = await Posts.findMany(
-    {},
-    {
-        populate: {
-            owner: User,
-        },
-        select: {
-            owner: {
-                password: 0,
-            },
-        },
-    }
+  {},
+  {
+    populate: {
+      owner: User,
+    },
+    select: {
+      owner: {
+        password: 0,
+      },
+    },
+  }
 );
 ```
 
@@ -620,19 +629,19 @@ const user = await Users.insertOne({ username: "Swordax" });
 
 // create post potato and reference the owner
 const post = await Posts.insertOne({
-    owner: user._id,
-    title: "Post Title",
-    text: "This is interesting!",
+  owner: user._id,
+  title: "Post Title",
+  text: "This is interesting!",
 });
 
 // find post potato and populate owner field
 const retrievedPost = await Posts.findOne(
-    { _id: post._id },
-    {
-        populate: {
-            owner: Users,
-        },
-    }
+  { _id: post._id },
+  {
+    populate: {
+      owner: Users,
+    },
+  }
 );
 ```
 
@@ -642,10 +651,10 @@ PotatoDB supports TypeScript. You can pass an interface that describes the struc
 
 ```ts
 interface IUser {
-    username: string;
-    email: string;
-    password: string;
-    level: number;
+  username: string;
+  email: string;
+  password: string;
+  level: number;
 }
 
 const Users = await DB.createFarm<IUser>("Users");
@@ -669,154 +678,156 @@ app.use(express.json());
 
 // set potatodb root
 setRoot({
-    rootPath: process.cwd(),
-    rootName: "databases",
+  rootPath: process.cwd(),
+  rootName: "databases",
 });
 
 // create project database and users farm
 let DB, Users, Posts;
 (async () => {
-    DB = await createDatabase("DB", false);
+  DB = await createDatabase("DB", {
+    overwrite: false,
+  });
 
-    const farmOptions = {
-        _id: true,
-        timestamps: true,
-    };
+  const farmOptions = {
+    _id: true,
+    timestamps: true,
+  };
 
-    Users = await DB.createFarm("Users", farmOptions);
-    Posts = await DB.createFarm("Posts", farmOptions);
+  Users = await DB.createFarm("Users", farmOptions);
+  Posts = await DB.createFarm("Posts", farmOptions);
 
-    // listen to server requests
-    app.listen(3000, () => {
-        console.log("Server running on port 3000");
-    });
+  // listen to server requests
+  app.listen(3000, () => {
+    console.log("Server running on port 3000");
+  });
 })();
 
 // create user
 app.post("/create-user", async (req, res) => {
-    try {
-        const user = await Users.insertOne(req.body);
-        res.status(200).json({ success: true, userId: user._id });
-    } catch (err) {
-        console.error(err);
-        res.status(400).json({ success: false, error: err.message });
-    }
+  try {
+    const user = await Users.insertOne(req.body);
+    res.status(200).json({ success: true, userId: user._id });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ success: false, error: err.message });
+  }
 });
 
 // get user
 app.get("/get-user", async (req, res) => {
-    try {
-        const user = await Users.findOne(
-            { username: req.body.username },
-            {
-                select: {
-                    password: 0,
-                },
-            }
-        );
-        res.status(200).json({ success: true, user });
-    } catch (err) {
-        console.error(err);
-        res.status(400).json({ success: false, error: err.message });
-    }
+  try {
+    const user = await Users.findOne(
+      { username: req.body.username },
+      {
+        select: {
+          password: 0,
+        },
+      }
+    );
+    res.status(200).json({ success: true, user });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ success: false, error: err.message });
+  }
 });
 
 // get users (implementing pagination)
 app.get("/get-users/:pageNumber", async (req, res) => {
-    const resultsPerPage = 10;
+  const resultsPerPage = 10;
 
-    try {
-        /*
+  try {
+    /*
             1- implement pagination using skip and limit options
             2- show most recent data first
             3- sort data according to "user.personal_information.age" field in ascending order
         */
 
-        const users = await Users.findMany(
-            {},
-            {
-                skip: resultsPerPage * (req.params.pageNumber - 1),
-                limit: resultsPerPage,
-                recent: true,
-                sort: {
-                    "personal_information.age": 1,
-                },
-                select: {
-                    password: 0,
-                },
-            }
-        );
+    const users = await Users.findMany(
+      {},
+      {
+        skip: resultsPerPage * (req.params.pageNumber - 1),
+        limit: resultsPerPage,
+        recent: true,
+        sort: {
+          "personal_information.age": 1,
+        },
+        select: {
+          password: 0,
+        },
+      }
+    );
 
-        res.status(200).json({ success: true, users });
-    } catch (err) {
-        console.error(err);
-        res.status(400).json({ success: false, error: err.message });
-    }
+    res.status(200).json({ success: true, users });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ success: false, error: err.message });
+  }
 });
 
 // update username
 app.patch("/update-username", async (req, res) => {
-    try {
-        const updatedUser = await User.updateOne(
-            {
-                username: req.body.username,
-            },
-            {
-                username: req.body.newUsername,
-            },
-            {
-                updated: true,
-                select: {
-                    password: 0,
-                },
-            }
-        );
+  try {
+    const updatedUser = await User.updateOne(
+      {
+        username: req.body.username,
+      },
+      {
+        username: req.body.newUsername,
+      },
+      {
+        updated: true,
+        select: {
+          password: 0,
+        },
+      }
+    );
 
-        res.status(200).json({ success: true, updatedUser });
-    } catch (err) {
-        console.error(err);
-        res.status(400).json({ success: false, error: err.message });
-    }
+    res.status(200).json({ success: true, updatedUser });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ success: false, error: err.message });
+  }
 });
 
 // publish post
 app.post("/post", async (req, res) => {
-    try {
-        const postObject = {
-            ...req.body,
-            owner: req.user._id,
-        };
+  try {
+    const postObject = {
+      ...req.body,
+      owner: req.user._id,
+    };
 
-        const post = await Posts.insertOne(postObject);
-        res.status(200).json({ success: true, postId: post._id });
-    } catch (err) {
-        console.error(err);
-        res.status(400).json({ success: false, error: err.message });
-    }
+    const post = await Posts.insertOne(postObject);
+    res.status(200).json({ success: true, postId: post._id });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ success: false, error: err.message });
+  }
 });
 
 // find post
 app.get("/post/:postId", async (req, res) => {
-    try {
-        const post = await Posts.findOne(
-            { _id: req.params.postId },
-            {
-                populate: {
-                    owner: Users,
-                },
-                select: {
-                    post_token: 0,
-                    owner: {
-                        password: 0,
-                    },
-                },
-            }
-        );
-        res.status(200).json({ success: true, post });
-    } catch (err) {
-        console.error(err);
-        res.status(400).json({ success: false, error: err.message });
-    }
+  try {
+    const post = await Posts.findOne(
+      { _id: req.params.postId },
+      {
+        populate: {
+          owner: Users,
+        },
+        select: {
+          post_token: 0,
+          owner: {
+            password: 0,
+          },
+        },
+      }
+    );
+    res.status(200).json({ success: true, post });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ success: false, error: err.message });
+  }
 });
 ```
 
@@ -824,8 +835,8 @@ app.get("/post/:postId", async (req, res) => {
 
 My Contacts:
 
--   email: mo.bakour@outlook.com
--   website: https://bakour.dev
--   linkedin: https://linkedin.com/in/mobakour
--   github: https://github.com/MoBakour
--   discord: https://discord.com/users/465453058667839499/
+- email: mo.bakour@outlook.com
+- website: https://bakour.dev
+- linkedin: https://linkedin.com/in/mobakour
+- github: https://github.com/MoBakour
+- discord: https://discord.com/users/465453058667839499/
