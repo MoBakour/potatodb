@@ -55,6 +55,7 @@
 - Enhanced error handling
 - Enhanced type support and documentation with JSDocs
 - findOne, updateOne, and deleteOne operations now return null instead of undefined if no document was found or affected
+- countPotatoes now accepts a filter to count documents that pass the query
 - Renamed project option to select
 - Renamed identification to \_id
 - Made timestamps off by default

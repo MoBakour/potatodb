@@ -14,25 +14,22 @@ setRoot({
 });
 
 // create project database and users farm
-let DB, Users, Posts;
-(async () => {
-    DB = await createDatabase("DB", {
-        overwrite: false,
-    });
+const DB = createDatabase("DB", {
+    overwrite: false,
+});
 
-    const farmOptions = {
-        _id: true,
-        timestamps: true,
-    };
+const farmOptions = {
+    _id: true,
+    timestamps: true,
+};
 
-    Users = await DB.createFarm("Users", farmOptions);
-    Posts = await DB.createFarm("Posts", farmOptions);
+const Users = DB.createFarm("Users", farmOptions);
+const Posts = DB.createFarm("Posts", farmOptions);
 
-    // listen to server requests
-    app.listen(3000, () => {
-        console.log("Server running on port 3000");
-    });
-})();
+// listen to server requests
+app.listen(3000, () => {
+    console.log("Server running on port 3000");
+});
 
 // create user
 app.post("/create-user", async (req, res) => {

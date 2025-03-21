@@ -286,7 +286,7 @@ These options allow you to customize query behavior when retrieving, updating, o
 | **Option**     | **Type**               | **Description**                                                                                                                                                                | **Available In**                                                                        |
 | -------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
 | **`limit`**    | `number`               | Sets the maximum number of potatoes to return. Accepts negative values to start from the end of the array.                                                                     | `findMany()`                                                                            |
-| **`skip`**     | `number`               | Skips a specified number of potatoes before processing the query. Accepts negative values to start from the end of the array.                                                  | `findOne()`, `findMany()`                                                               |
+| **`skip`**     | `number`               | Skips a specified number of potatoes before processing the query.                                                                                                              | `findOne()`, `findMany()`                                                               |
 | **`recent`**   | `boolean`              | If `true`, prioritizes recent potatoes in the search. By default, data is processed from oldest to newest.                                                                     | `findOne()`, `findMany()`                                                               |
 | **`sort`**     | `object` \| `function` | Defines sorting behavior. Can be an object where keys are field names and values specify sorting order (`1` for ascending, `-1` for descending), or a custom sorting function. | `findMany()`, `updateMany()`, `deleteMany()`                                            |
 | **`select`**   | `object`               | Specifies fields to include or exclude in the result. See the [Selection](#selection) section for details.                                                                     | `findOne()`, `findMany()`, `updateOne()`, `updateMany()`, `deleteOne()`, `deleteMany()` |
@@ -660,7 +660,7 @@ interface IUser {
 const Users = await DB.createFarm<IUser>("Users");
 ```
 
-Note that you do not need to specify `_id`, `createdAt`, or `updatedAt` if `_id` and `timestamps` where set to true. PotatoDB takes care of that.
+Note that you do not need to specify `_id`, `createdAt`, or `updatedAt` in the farm interface. PotatoDB takes care of these if `_id` and `timestamps` were set to true in farm options.
 
 #### Full Example with Express
 
@@ -683,25 +683,22 @@ setRoot({
 });
 
 // create project database and users farm
-let DB, Users, Posts;
-(async () => {
-  DB = await createDatabase("DB", {
-    overwrite: false,
-  });
+const DB = createDatabase("DB", {
+  overwrite: false,
+});
 
-  const farmOptions = {
-    _id: true,
-    timestamps: true,
-  };
+const farmOptions = {
+  _id: true,
+  timestamps: true,
+};
 
-  Users = await DB.createFarm("Users", farmOptions);
-  Posts = await DB.createFarm("Posts", farmOptions);
+const Users = DB.createFarm("Users", farmOptions);
+const Posts = DB.createFarm("Posts", farmOptions);
 
-  // listen to server requests
-  app.listen(3000, () => {
-    console.log("Server running on port 3000");
-  });
-})();
+// listen to server requests
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
 
 // create user
 app.post("/create-user", async (req, res) => {
