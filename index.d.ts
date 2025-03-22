@@ -190,7 +190,7 @@ declare module "potatodb" {
 
         public dropFarm(): void;
 
-        public countPotatoes(): Promise<number>;
+        public countPotatoes(test?: Test): Promise<number>;
 
         private insertLogic(
             caller: "insertOne" | "insertMany",
