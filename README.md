@@ -5,7 +5,7 @@
 	<br>
 	A nodejs filesystem json database system.
 	<br>
-	By <a href="https://linkedin.com/in/mobakour">MoBakour</a>
+	By <a href="https://bakour.dev">MoBakour</a>
 </p>
 
 ## About
