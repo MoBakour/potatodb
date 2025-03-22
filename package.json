@@ -9,7 +9,8 @@
         "filesystem",
         "nodejs",
         "javascript",
-        "nosql"
+        "nosql",
+        "json"
     ],
     "author": "MoBakour",
     "license": "MIT",
