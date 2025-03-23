@@ -19,5 +19,8 @@
     "directories": {
         "lib": "lib"
     },
-    "repository": "MoBakour/potatodb"
+    "repository": "MoBakour/potatodb",
+    "dependencies": {
+        "jest": "^29.7.0"
+    }
 }

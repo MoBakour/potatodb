@@ -64,3 +64,8 @@
 - setRoot is no longer required, but will be available for customization
 - createDatabase accepts an options object with overwrite field rather than a second boolean argument for overwrite
 - Fixed error that pops up when trying to update an inexistent document with updateOne method
+
+## [1.2.0] - 2025-3-24
+
+- Added insert options
+- Improved types

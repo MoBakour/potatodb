@@ -142,6 +142,16 @@ await Farm.insertMany([
 ]);
 ```
 
+#### Insert Methods Options
+
+Both `insertOne()` and `insertMany()` methods accept a second options object.
+
+```js
+await Farm.insertMany(insertObject, optionsObject);
+```
+
+Learn about [Operation Options](#operation-options)
+
 #### Farm.findOne
 
 The `findOne()` method is a farm method used to find a single potato and return it. The method takes two arguments: first is a query object or a test function, and second is an options object. Both arguments are optional.
@@ -170,7 +180,7 @@ Both `findOne()` and `findMany()` methods accept a second options object.
 const results = await Farm.findMany(queryObject, optionsObject);
 ```
 
-Learn about [Query Options](#query-options)
+Learn about [Operation Options](#operation-options)
 
 #### Farm.updateOne
 
@@ -198,7 +208,7 @@ Both `updateOne()` and `updateMany()` methods accept a third options object.
 await Farm.updateOne(queryObject, updateObject, optionsObject);
 ```
 
-Learn about [Query Options](#query-options)
+Learn about [Operation Options](#operation-options)
 
 #### Farm.deleteOne
 
@@ -226,7 +236,7 @@ Both `deleteOne()` and `deleteMany()` methods could take a second options object
 await Farm.deleteOne(queryObject, optionsObject);
 ```
 
-Learn about [Query Options](#query-options)
+Learn about [Operation Options](#operation-options)
 
 #### Farm.sampleOne
 
@@ -279,19 +289,19 @@ await Farm.countPotatoes({ active: true });
 // returns the precise count of the active documents
 ```
 
-#### Query Options
+#### Operation Options
 
-These options allow you to customize query behavior when retrieving, updating, or deleting potatoes in the database.
+These options allow you to customize query behavior when inserting, finding, updating, or deleting potatoes in the database.
 
-| **Option**     | **Type**               | **Description**                                                                                                                                                                | **Available In**                                                                        |
-| -------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
-| **`limit`**    | `number`               | Sets the maximum number of potatoes to return. Accepts negative values to start from the end of the array.                                                                     | `findMany()`                                                                            |
-| **`skip`**     | `number`               | Skips a specified number of potatoes before processing the query.                                                                                                              | `findOne()`, `findMany()`                                                               |
-| **`recent`**   | `boolean`              | If `true`, prioritizes recent potatoes in the search. By default, data is processed from oldest to newest.                                                                     | `findOne()`, `findMany()`                                                               |
-| **`sort`**     | `object` \| `function` | Defines sorting behavior. Can be an object where keys are field names and values specify sorting order (`1` for ascending, `-1` for descending), or a custom sorting function. | `findMany()`, `updateMany()`, `deleteMany()`                                            |
-| **`select`**   | `object`               | Specifies fields to include or exclude in the result. See the [Selection](#selection) section for details.                                                                     | `findOne()`, `findMany()`, `updateOne()`, `updateMany()`, `deleteOne()`, `deleteMany()` |
-| **`populate`** | `object`               | Defines reference fields to populate. See the [Population](#population) section for details.                                                                                   | `findOne()`, `findMany()`, `updateOne()`, `updateMany()`, `deleteOne()`, `deleteMany()` |
-| **`updated`**  | `boolean`              | Determines whether the returned result is the post-update or pre-update version. Defaults to `true`, returning the updated data.                                               | `updateOne()`, `updateMany()`                                                           |
+| **Option**     | **Type**               | **Description**                                                                                                                                                                | **Available In**                                                                                                       |
+| -------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| **`limit`**    | `number`               | Sets the maximum number of potatoes to return. Accepts negative values to start from the end of the array.                                                                     | `findMany()`                                                                                                           |
+| **`skip`**     | `number`               | Skips a specified number of potatoes before processing the query.                                                                                                              | `findOne()`, `findMany()`                                                                                              |
+| **`recent`**   | `boolean`              | If `true`, prioritizes recent potatoes in the search. By default, data is processed from oldest to newest.                                                                     | `findOne()`, `findMany()`                                                                                              |
+| **`sort`**     | `object` \| `function` | Defines sorting behavior. Can be an object where keys are field names and values specify sorting order (`1` for ascending, `-1` for descending), or a custom sorting function. | `insertMany()`, `findMany()`, `updateMany()`, `deleteMany()`                                                           |
+| **`select`**   | `object`               | Specifies fields to include or exclude in the result. See the [Selection](#selection) section for details.                                                                     | `insertOne()`, `insertMany()`, `findOne()`, `findMany()`, `updateOne()`, `updateMany()`, `deleteOne()`, `deleteMany()` |
+| **`populate`** | `object`               | Defines reference fields to populate. See the [Population](#population) section for details.                                                                                   | `insertOne()`, `insertMany()`, `findOne()`, `findMany()`, `updateOne()`, `updateMany()`, `deleteOne()`, `deleteMany()` |
+| **`updated`**  | `boolean`              | Determines whether the returned result is the post-update or pre-update version. Defaults to `true`, returning the updated data.                                               | `updateOne()`, `updateMany()`                                                                                          |
 
 #### Principles of Querying with PotatoDB
 
